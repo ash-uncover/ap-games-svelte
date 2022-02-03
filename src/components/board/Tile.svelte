@@ -3,6 +3,9 @@
 
   // Store
   import {
+    activeElement,
+  } from 'stores/game.js'
+  import {
     TILES_MAP,
   } from 'stores/tiles.js'
 
@@ -14,15 +17,15 @@
   // Properties
   export let id
 
-  let storeTile
+  let tile
   TILES_MAP[id].subscribe(value => {
-    storeTile = value
+    tile = value
   })
 
-  function buildClass(tile) {
+  function buildClass(t) {
     const aClass = ['tile']
-    if (tile.selected) aClass.push('selected')
-    if (tile.terrain) aClass.push(`terrain-${tile.terrain}`)
+    if (t.selected) aClass.push('selected')
+    if (t.terrain) aClass.push(`terrain-${t.terrain}`)
     return aClass.join(' ')
   }
 
@@ -32,13 +35,13 @@
 </script>
 
 <div
-  class={buildClass(storeTile)}
+  class={buildClass(tile)}
   on:click={handleClickTile}
 >
   <img
     class='layer background-terrain'
-    src={`images/${storeTile.terrain}.jpg`}
-    alt={storeTile.terrain}
+    src={`images/${tile.terrain}.jpg`}
+    alt={tile.terrain}
   />
   <div
     class='layer background-selection'
@@ -46,8 +49,10 @@
   <div
     class='layer content'
   >
-    {#if storeTile.elements.length}
-      <TileElement id={storeTile.elements[0]} />
+    {#if tile.elements.includes($activeElement)}
+      <TileElement id={$activeElement} />
+    {:else if tile.elements.length}
+      <TileElement id={tile.elements[tile.elements.length - 1]} />
     {/if}
   </div>
 </div>

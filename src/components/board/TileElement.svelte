@@ -2,10 +2,6 @@
   import { onDestroy } from 'svelte'
 
   // Import Stores
-
-  import {
-    activeElement
-  } from 'stores/game.js'
   import {
     ELEMENTS_MAP
   } from 'stores/elements.js'
@@ -15,17 +11,6 @@
 
   // Properties
   export let id
-
-  $: {
-    unsuscribeElement && unsuscribeElement()
-    unsuscribeElement = ELEMENTS_MAP[id].subscribe(value => {
-      element = value
-    })
-    unsuscribePlayer && unsuscribePlayer()
-    unsuscribePlayer = PLAYERS_MAP[element.player].subscribe(value => {
-      player = value
-    })
-  }
 
   // Store binding
   let element
@@ -42,6 +27,19 @@
     unsuscribePlayer()
   })
 
+  // Store reactivity
+  $: {
+    unsuscribeElement && unsuscribeElement()
+    unsuscribeElement = ELEMENTS_MAP[id].subscribe(value => {
+      element = value
+    })
+    unsuscribePlayer && unsuscribePlayer()
+    unsuscribePlayer = PLAYERS_MAP[element.player].subscribe(value => {
+      player = value
+    })
+  }
+
+  // Helpers
   const buildClass = (elem, play) => {
     const aClass = ['element']
     aClass.push(play.id)
@@ -92,6 +90,6 @@
 
   @keyframes active {
     35% { opacity: 1; }
-    100%   { opacity: 0.15; }
+    100% { opacity: 0.15; }
   }
 </style>
