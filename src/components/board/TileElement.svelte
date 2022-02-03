@@ -4,10 +4,10 @@
   // Import Stores
   import {
     ELEMENTS_MAP
-  } from 'stores/elements.js'
+  } from 'store/stores/elements.js'
   import {
     PLAYERS_MAP
-  } from 'stores/players.js'
+  } from 'store/stores/players.js'
 
   // Properties
   export let id
@@ -57,16 +57,22 @@
     height: 70%;
     width: 70%;
 
-    border: 4px solid #635d5c;
-    background-color: black;
+    border: 4px solid #666;
+    border-top-color: darkgrey;
+    border-left-color: darkgrey;
+    box-shadow: rgb(0 0 0 / 55%) 0px 5px 15px;
+
+    background-color: white;
     color: black;
     font-weight: bold;
     transition: border-color 5s;
   }
 
-  .active {
-    animation: .5s ease-out 0.5s infinite alternate active;
-    border-color: #D3D3D3;
+  .element.active {
+    animation: .6s ease-out 0.2s infinite alternate active;
+    border-color: grey;
+    border-top-color: lightgrey;
+    border-left-color: lightgrey;
   }
 
   .player-1 {
@@ -77,7 +83,7 @@
   }
 
   @keyframes active {
-    35% { opacity: 1; }
+    45% { opacity: 1; }
     100% { opacity: 0.15; }
   }
 </style>

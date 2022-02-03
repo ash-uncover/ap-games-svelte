@@ -3,10 +3,10 @@
 
   import {
     board,
-  } from 'stores/board.js'
+  } from 'store/stores/board.js'
   import {
     selectedTile,
-  } from 'stores/game.js'
+  } from 'store/stores/game.js'
 
   function isInSelectionRange(x, y, range = 2) {
     if ($selectedTile && $selectedTile.x > -1 && $selectedTile.y > -1) {

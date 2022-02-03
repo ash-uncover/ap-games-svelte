@@ -3,10 +3,10 @@
 
   import {
     PLAYERS_MAP,
-  } from 'stores/players.js'
+  } from 'store/stores/players.js'
   import {
     activePlayer,
-  } from 'stores/game.js'
+  } from 'store/stores/game.js'
 
   // Store binding
   let activePlayerId

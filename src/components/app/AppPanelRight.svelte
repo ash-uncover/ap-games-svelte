@@ -3,10 +3,10 @@
 
     import {
       ELEMENTS_MAP,
-    } from 'stores/elements.js'
+    } from 'store/stores/elements.js'
     import {
       activeElement,
-    } from 'stores/game.js'
+    } from 'store/stores/game.js'
 
     // Store binding
     let activeElementId

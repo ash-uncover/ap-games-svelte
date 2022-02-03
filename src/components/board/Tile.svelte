@@ -4,15 +4,15 @@
   // Store
   import {
     activeElement,
-  } from 'stores/game.js'
+  } from 'store/stores/game.js'
   import {
     TILES_MAP,
-  } from 'stores/tiles.js'
+  } from 'store/stores/tiles.js'
 
   // Actions
   import {
     selectTile
-  } from 'stores/actions/selectTile.js'
+  } from 'store/actions/selectTile.js'
 
   // Properties
   export let id

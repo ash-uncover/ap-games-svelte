@@ -5,6 +5,7 @@
     KEY_CODES,
   } from 'util/keys.js'
   import {
+    GAME_STATE,
     BOARD_TYPE,
     BOARD_TYPES,
     ELEMENT_TYPE,
@@ -13,24 +14,25 @@
 
   import {
     generateBoard,
-  } from 'stores/board.js'
+  } from 'store/stores/board.js'
   import {
     createElement,
-  } from 'stores/elements.js'
+  } from 'store/stores/elements.js'
   import {
+    gameState,
     activeElement,
     activePlayer,
-  } from 'stores/game.js'
+  } from 'store/stores/game.js'
   import {
     createPlayer,
-  } from 'stores/players.js'
+  } from 'store/stores/players.js'
 
   import {
     moveElement,
-  } from 'stores/actions/moveElement.js'
+  } from 'store/actions/moveElement.js'
   import {
     nextActiveElement,
-  } from 'stores/actions/nextActiveElement.js'
+  } from 'store/actions/nextActiveElement.js'
 
   import AppFooter from 'components/app/AppFooter.svelte'
   import AppPanelLeft from 'components/app/AppPanelLeft.svelte'
@@ -44,52 +46,57 @@
   let generated = false
 
   function handleKeyDown(event) {
-    console.log(event)
-    switch (event.code) {
-      case KEY_CODES.NUMPAD_1: {
-        moveElement($activeElement, -1, 1) && nextActiveElement()
-        break
-      }
-      case KEY_CODES.ARROW_DOWN:
-      case KEY_CODES.NUMPAD_2: {
-        moveElement($activeElement, 0, 1) && nextActiveElement()
-        break
-      }
-      case KEY_CODES.NUMPAD_3: {
-        moveElement($activeElement, 1, 1) && nextActiveElement()
-        break
-      }
-      case KEY_CODES.ARROW_LEFT:
-      case KEY_CODES.NUMPAD_4: {
-        moveElement($activeElement, -1, 0) && nextActiveElement()
-        break
-      }
-      case KEY_CODES.ARROW_RIGHT:
-      case KEY_CODES.NUMPAD_6: {
-        moveElement($activeElement, 1, 0) && nextActiveElement()
-        break
-      }
-      case KEY_CODES.NUMPAD_7: {
-        moveElement($activeElement, -1, -1) && nextActiveElement()
-        break
-      }
-      case KEY_CODES.ARROW_UP:
-      case KEY_CODES.NUMPAD_8: {
-        moveElement($activeElement, 0, -1) && nextActiveElement()
-        break
-      }
-      case KEY_CODES.NUMPAD_9: {
-        moveElement($activeElement, 1, -1) && nextActiveElement()
-        break
-      }
-      default: {
-        // Ignore
+    if ($activeElement) {
+      switch (event.code) {
+        case KEY_CODES.NUMPAD_1: {
+          moveElement($activeElement, -1, 1) && nextActiveElement()
+          break
+        }
+        case KEY_CODES.ARROW_DOWN:
+        case KEY_CODES.NUMPAD_2: {
+          moveElement($activeElement, 0, 1) && nextActiveElement()
+          break
+        }
+        case KEY_CODES.NUMPAD_3: {
+          moveElement($activeElement, 1, 1) && nextActiveElement()
+          break
+        }
+        case KEY_CODES.ARROW_LEFT:
+        case KEY_CODES.NUMPAD_4: {
+          moveElement($activeElement, -1, 0) && nextActiveElement()
+          break
+        }
+        case KEY_CODES.NUMPAD_5:
+        case KEY_CODES.SPACE: {
+          nextActiveElement()
+          break
+        }
+        case KEY_CODES.ARROW_RIGHT:
+        case KEY_CODES.NUMPAD_6: {
+          moveElement($activeElement, 1, 0) && nextActiveElement()
+          break
+        }
+        case KEY_CODES.NUMPAD_7: {
+          moveElement($activeElement, -1, -1) && nextActiveElement()
+          break
+        }
+        case KEY_CODES.ARROW_UP:
+        case KEY_CODES.NUMPAD_8: {
+          moveElement($activeElement, 0, -1) && nextActiveElement()
+          break
+        }
+        case KEY_CODES.NUMPAD_9: {
+          moveElement($activeElement, 1, -1) && nextActiveElement()
+          break
+        }
+        default: {
+          // Ignore
+        }
       }
     }
   }
 
   function handleGenerateBoard () {
-    generated = true
     generateBoard(type, width, height)
     const player1Id = createPlayer()
     const player2Id = createPlayer()
@@ -105,17 +112,18 @@
       player: player1Id,
     })
     createElement({
-      type: ELEMENT_TYPE.WARRIOR,
-      tile: 'tile-3',
+      type: ELEMENT_TYPE.TRIBE,
+      tile: `tile-${width * height}`,
       player: player2Id,
     })
     createElement({
-      type: ELEMENT_TYPE.TRIBE,
-      tile: 'tile-4',
+      type: ELEMENT_TYPE.WARRIOR,
+      tile: `tile-${width * height - 1}`,
       player: player2Id,
     })
     $activePlayer = player1Id
     $activeElement = element1Id
+    $gameState = GAME_STATE.PLAYER_TURN_INSIDE
   }
 
 </script>
@@ -128,7 +136,7 @@
   class='app'
 >
   <div class='toolbar'>
-    {#if !generated}
+    {#if $gameState === GAME_STATE.GAME_NOT_STARTED}
       <select bind:value={type}>
         {#each BOARD_TYPES as boardType}
           <option value={boardType}>
@@ -158,7 +166,7 @@
     </div>
 
     <div class='area'>
-      {#if generated}
+      {#if $gameState !== GAME_STATE.GAME_NOT_STARTED}
         <Board />
       {:else}
         <div>Create a board to start</div>

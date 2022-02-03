@@ -7,7 +7,7 @@ import {
 
 import {
   createTile,
-} from 'stores/tiles.js'
+} from 'store/stores/tiles.js'
 
 export const board = writable({
   type: BOARD_TYPE.SQUARE,

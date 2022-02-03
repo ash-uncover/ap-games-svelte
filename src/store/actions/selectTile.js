@@ -1,9 +1,9 @@
 import {
   selectedTile,
-} from 'stores/game.js'
+} from 'store/stores/game.js'
 import {
   TILES_MAP,
-} from 'stores/tiles.js'
+} from 'store/stores/tiles.js'
 
 let selectedTileValue
 selectedTile.subscribe(value => {

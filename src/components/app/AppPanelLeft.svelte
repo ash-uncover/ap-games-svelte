@@ -3,13 +3,13 @@
 
     import {
       ELEMENTS_MAP,
-    } from 'stores/elements.js'
+    } from 'store/stores/elements.js'
     import {
       TILES_MAP,
-    } from 'stores/tiles.js'
+    } from 'store/stores/tiles.js'
     import {
       selectedTile,
-    } from 'stores/game.js'
+    } from 'store/stores/game.js'
 
     // Store binding
     let selectedTileId

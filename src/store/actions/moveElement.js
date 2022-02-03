@@ -1,12 +1,12 @@
 import {
   board,
-} from 'stores/board.js'
+} from 'store/stores/board.js'
 import {
   ELEMENTS_MAP,
-} from 'stores/elements.js'
+} from 'store/stores/elements.js'
 import {
   TILES_MAP,
-} from 'stores/tiles.js'
+} from 'store/stores/tiles.js'
 
 let boardValue
 board.subscribe(value => {

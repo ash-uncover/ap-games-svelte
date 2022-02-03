@@ -2,14 +2,14 @@
 import {
   activeElement,
   activePlayer,
-} from 'stores/game.js'
+} from 'store/stores/game.js'
 import {
   ELEMENTS_MAP,
-} from 'stores/elements.js'
+} from 'store/stores/elements.js'
 import {
   PLAYERS,
   PLAYERS_MAP,
-} from 'stores/players.js'
+} from 'store/stores/players.js'
 
 let activeElementId
 activeElement.subscribe(value => {

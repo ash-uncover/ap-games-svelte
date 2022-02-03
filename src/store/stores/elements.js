@@ -2,10 +2,10 @@ import { writable } from 'svelte/store'
 
 import {
   PLAYERS_MAP,
-} from 'stores/players.js'
+} from 'store/stores/players.js'
 import {
   TILES_MAP,
-} from 'stores/tiles.js'
+} from 'store/stores/tiles.js'
 
 let eCount = 1
 
