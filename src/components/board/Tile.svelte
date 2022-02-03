@@ -22,29 +22,26 @@
     tile = value
   })
 
-  function buildClass(t) {
-    const aClass = ['tile']
-    if (t.selected) aClass.push('selected')
-    if (t.terrain) aClass.push(`terrain-${t.terrain}`)
-    return aClass.join(' ')
-  }
-
   function handleClickTile() {
     selectTile(id)
   }
 </script>
 
 <div
-  class={buildClass(tile)}
+  class={`tile ${tile.terrain}`}
+  class:selected={tile.selected}
   on:click={handleClickTile}
 >
   <img
-    class='layer background-terrain'
+    class='layer'
     src={`images/${tile.terrain}.jpg`}
     alt={tile.terrain}
   />
   <div
-    class='layer background-selection'
+    class='layer layer-background'
+  />
+  <div
+    class='layer layer-border'
   />
   <div
     class='layer content'
@@ -60,32 +57,30 @@
 <style>
 	.tile {
     flex-shrink: 0;
-    height: 40px;
-    width: 40px;
+    height: 96px;
+    width: 96px;
 
     position: relative;
-
     background-color: white;
-    border: 1px solid lightgrey;
+
     user-select: none;
     cursor: pointer;
-    box-sizing: border-box;
 	}
-  .tile:hover {
-    z-index: 5;
-    border-color: black;
-    border-width: 2px;
-  }
 
   .layer {
     width: 100%;
     height: 100%;
     position: absolute;
+    box-sizing: border-box;
   }
-  .background-selection {
+  .layer-background {
     background: black;
     opacity: 0.2;
   }
+  .layer-border {
+    border-radius: 2px;;
+  }
+
   .content {
     display: flex;
     align-items: center;
@@ -93,9 +88,16 @@
     overflow: hidden;
   }
 
-  .selected .background-selection {
+  .selected .layer-background {
     opacity: 0;
   }
+  .tile:not(.selected):hover .layer-border {
+    border: 2px solid darkgrey;
+  }
+  .selected .layer-border {
+    border: 2px solid lightgrey;
+  }
+
   .inrange {
     background-color: lightgreen;
   }

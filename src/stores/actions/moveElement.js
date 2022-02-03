@@ -14,28 +14,37 @@ board.subscribe(value => {
 })
 
 export function moveElement(id, deltaX, deltaY) {
+  let result = false
   ELEMENTS_MAP[id].update(element => {
     let currentX
     let currentY
-    TILES_MAP[element.tile].update(tile => {
+    TILES_MAP[element.tile].subscribe(tile => {
       currentX = tile.x
       currentY = tile.y
-      tile.elements.splice(tile.elements.indexOf(id), 1)
-      return {
+    })()
+    const newX = currentX + deltaX
+    const newY = currentY + deltaY
+    const validX = deltaX ? (-1 < newX && newX < boardValue.width) : true
+    const validY = deltaY ? (-1 < newY && newY < boardValue.height) : true
+    if (validX && validY) {
+      TILES_MAP[element.tile].update(tile => {
+        tile.elements.splice(tile.elements.indexOf(id), 1)
+        return {
+          ...tile,
+        }
+      })
+      const newTileId = boardValue.tiles[newY][newX]
+      TILES_MAP[newTileId].update(tile => ({
         ...tile,
+        elements: [...tile.elements, id],
+      }))
+      result = true
+      return {
+        ...element,
+        tile: newTileId
       }
-    })
-    const newX = Math.min(Math.max(currentX + deltaX, 0), boardValue.width - 1)
-    const newY = Math.min(Math.max(currentY + deltaY, 0), boardValue.height - 1)
-    const newTile = boardValue.tiles[newY][newX]
-    TILES_MAP[newTile].update(tile => ({
-      ...tile,
-      elements: [...tile.elements, id],
-    }))
-    const result = {
-      ...element,
-      tile: newTile
     }
-    return result
+    return element
   })
+  return result
 }

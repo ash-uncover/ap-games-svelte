@@ -43,33 +43,50 @@
 	let height = 5
   let generated = false
 
-  window.addEventListener('keydown', (event) => {
-    switch (event.keyCode) {
-      case KEY_CODES.ARROW_LEFT: {
-        moveElement($activeElement, -1, 0)
-        nextActiveElement()
+  function handleKeyDown(event) {
+    console.log(event)
+    switch (event.code) {
+      case KEY_CODES.NUMPAD_1: {
+        moveElement($activeElement, -1, 1) && nextActiveElement()
         break
       }
-      case KEY_CODES.ARROW_UP: {
-        moveElement($activeElement, 0, -1)
-        nextActiveElement()
+      case KEY_CODES.ARROW_DOWN:
+      case KEY_CODES.NUMPAD_2: {
+        moveElement($activeElement, 0, 1) && nextActiveElement()
         break
       }
-      case KEY_CODES.ARROW_RIGHT: {
-        moveElement($activeElement, 1, 0)
-        nextActiveElement()
+      case KEY_CODES.NUMPAD_3: {
+        moveElement($activeElement, 1, 1) && nextActiveElement()
         break
       }
-      case KEY_CODES.ARROW_DOWN: {
-        moveElement($activeElement, 0, 1)
-        nextActiveElement()
+      case KEY_CODES.ARROW_LEFT:
+      case KEY_CODES.NUMPAD_4: {
+        moveElement($activeElement, -1, 0) && nextActiveElement()
+        break
+      }
+      case KEY_CODES.ARROW_RIGHT:
+      case KEY_CODES.NUMPAD_6: {
+        moveElement($activeElement, 1, 0) && nextActiveElement()
+        break
+      }
+      case KEY_CODES.NUMPAD_7: {
+        moveElement($activeElement, -1, -1) && nextActiveElement()
+        break
+      }
+      case KEY_CODES.ARROW_UP:
+      case KEY_CODES.NUMPAD_8: {
+        moveElement($activeElement, 0, -1) && nextActiveElement()
+        break
+      }
+      case KEY_CODES.NUMPAD_9: {
+        moveElement($activeElement, 1, -1) && nextActiveElement()
         break
       }
       default: {
         // Ignore
       }
     }
-  })
+  }
 
   function handleGenerateBoard () {
     generated = true
@@ -104,6 +121,8 @@
 </script>
 
 <!-- RENDERING -->
+
+<svelte:window on:keydown={handleKeyDown}/>
 
 <div
   class='app'

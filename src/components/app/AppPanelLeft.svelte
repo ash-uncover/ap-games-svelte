@@ -22,11 +22,13 @@
         unsubscribeTile = TILES_MAP[selectedTileId].subscribe(value => {
           tile = value
         })
+      } else {
+        tile = null
       }
     })
 
     onDestroy(() => {
-      unsubcribeActivePlayer()
+      unsubcribeSelectedTile()
       unsubscribeTile && unsubscribeTile()
     })
 

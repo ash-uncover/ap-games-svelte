@@ -1,13 +1,16 @@
-export const KEY_NAMES = {
+export const KEY_CODES = {
     ARROW_LEFT: 'ArrowLeft',
     ARROW_UP: 'ArrowUp',
     ARROW_RIGHT: 'ArrowRight',
     ARROW_DOWN: 'ArrowDown',
-}
-
-export const KEY_CODES = {
-    ARROW_LEFT: 37,
-    ARROW_UP: 38,
-    ARROW_RIGHT: 39,
-    ARROW_DOWN: 40,
+    NUMPAD_0: 'Numpad0',
+    NUMPAD_1: 'Numpad1',
+    NUMPAD_2: 'Numpad2',
+    NUMPAD_3: 'Numpad3',
+    NUMPAD_4: 'Numpad4',
+    NUMPAD_5: 'Numpad5',
+    NUMPAD_6: 'Numpad6',
+    NUMPAD_7: 'Numpad7',
+    NUMPAD_8: 'Numpad8',
+    NUMPAD_9: 'Numpad9',
 }

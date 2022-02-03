@@ -17,9 +17,13 @@ export function selectTile(id) {
       selected: false
     }))
   }
-  TILES_MAP[id].update(tile => ({
-    ...tile,
-    selected: true
-  }))
-  selectedTile.set(id)
+  if (id !== selectedTileValue) {
+    TILES_MAP[id].update(tile => ({
+      ...tile,
+      selected: true
+    }))
+    selectedTile.set(id)
+  } else {
+    selectedTile.set(null)
+  }
 }
