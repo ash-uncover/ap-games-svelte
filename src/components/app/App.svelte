@@ -2,6 +2,11 @@
 
 <script>
   import {
+    dispatcher,
+    createStore,
+    registry
+  } from 'store/store.js'
+  import {
     KEY_CODES,
   } from 'util/keys.js'
   import {
