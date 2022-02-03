@@ -2,6 +2,10 @@
   import { onDestroy } from 'svelte'
 
   // Import Stores
+
+  import {
+    activeElement
+  } from 'stores/game.js'
   import {
     ELEMENTS_MAP
   } from 'stores/elements.js'
@@ -26,9 +30,18 @@
 
   onDestroy(() => subscribers.forEach((sub => sub())))
 
+  const buildClass = ({ active }) => {
+    const aClass = ['element']
+    aClass.push(player.id)
+    if (active) {
+      aClass.push('active')
+    }
+    return aClass.join(' ')
+  }
+
 </script>
 
-<div class={`element ${player.id}`}>
+<div class={buildClass({ active: element.id === $activeElement })}>
   {element.type[0].toUpperCase()}
 </div>
 

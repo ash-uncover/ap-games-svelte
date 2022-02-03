@@ -81,9 +81,19 @@
       tile: 'tile-1',
       player: player1Id,
     })
-    const element2Id = createElement({
+    createElement({
       type: ELEMENT_TYPE.WARRIOR,
       tile: 'tile-2',
+      player: player1Id,
+    })
+    createElement({
+      type: ELEMENT_TYPE.WARRIOR,
+      tile: 'tile-3',
+      player: player2Id,
+    })
+    createElement({
+      type: ELEMENT_TYPE.TRIBE,
+      tile: 'tile-4',
       player: player2Id,
     })
     $activePlayer = player1Id

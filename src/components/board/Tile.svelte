@@ -1,5 +1,5 @@
 <script>
-  import Element from 'components/board/Element.svelte'
+  import TileElement from 'components/board/TileElement.svelte'
 
   // Store
   import {
@@ -39,7 +39,7 @@
   on:click={handleClickTile}
 >
   {#if storeTile.elements.length}
-    <Element id={storeTile.elements[0]} />
+    <TileElement id={storeTile.elements[0]} />
   {/if}
 </div>
 
