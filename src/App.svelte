@@ -1,5 +1,9 @@
+<!-- SCRIPTS -->
+
 <script>
-  import { KEY_CODES } from 'util/keys.js'
+  import {
+    KEY_CODES,
+  } from 'util/keys.js'
   import {
     BOARD_TYPE,
     BOARD_TYPES,
@@ -14,13 +18,23 @@
     createElement,
   } from 'stores/elements.js'
   import {
+    activeElement,
+    activePlayer,
+  } from 'stores/game.js'
+  import {
     createPlayer,
   } from 'stores/players.js'
 
   import {
-    moveElement
+    moveElement,
   } from 'stores/actions/moveElement.js'
+  import {
+    nextActiveElement,
+  } from 'stores/actions/nextActiveElement.js'
 
+  import AppFooter from 'components/app/AppFooter.svelte'
+  import AppPanelLeft from 'components/app/AppPanelLeft.svelte'
+  import AppPanelRight from 'components/app/AppPanelRight.svelte'
   import Board from 'components/board/Board.svelte'
   import Button from 'components/common/Button.svelte'
 
@@ -32,19 +46,23 @@
   window.addEventListener('keydown', (event) => {
     switch (event.keyCode) {
       case KEY_CODES.ARROW_LEFT: {
-        moveElement('element-1', -1, 0)
+        moveElement($activeElement, -1, 0)
+        nextActiveElement()
         break
       }
       case KEY_CODES.ARROW_UP: {
-        moveElement('element-1', 0, -1)
+        moveElement($activeElement, 0, -1)
+        nextActiveElement()
         break
       }
       case KEY_CODES.ARROW_RIGHT: {
-        moveElement('element-1', 1, 0)
+        moveElement($activeElement, 1, 0)
+        nextActiveElement()
         break
       }
       case KEY_CODES.ARROW_DOWN: {
-        moveElement('element-1', 0, 1)
+        moveElement($activeElement, 0, 1)
+        nextActiveElement()
         break
       }
       default: {
@@ -58,19 +76,23 @@
     generateBoard(type, width, height)
     const player1Id = createPlayer()
     const player2Id = createPlayer()
-    createElement({
+    const element1Id = createElement({
       type: ELEMENT_TYPE.TRIBE,
       tile: 'tile-1',
       player: player1Id,
     })
-    createElement({
+    const element2Id = createElement({
       type: ELEMENT_TYPE.WARRIOR,
       tile: 'tile-2',
       player: player2Id,
     })
+    $activePlayer = player1Id
+    $activeElement = element1Id
   }
 
 </script>
+
+<!-- RENDERING -->
 
 <div
   class='app'
@@ -100,27 +122,31 @@
     {/if}
   </div>
 
-  <div class='panel-left'>
+  <div class='content'>
+    <div class='panel panel-left'>
+      <AppPanelLeft />
+    </div>
 
-  </div>
+    <div class='area'>
+      {#if generated}
+        <Board />
+      {:else}
+        <div>Create a board to start</div>
+      {/if}
+    </div>
 
-  <div class='area'>
-    {#if generated}
-      <Board />
-    {:else}
-      <div>Create a board to start</div>
-    {/if}
-  </div>
-
-  <div class='panel-right'>
-
+    <div class='panel panel-right'>
+      <AppPanelRight />
+    </div>
   </div>
 
   <div class='footer'>
-
+    <AppFooter />
   </div>
 
 </div>
+
+<!-- STYLE -->
 
 <style>
   .app {
@@ -130,8 +156,16 @@
     left: 0;
     right: 0;
     overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
   }
   .toolbar {
+    position: relative;
+    width: 100%;
+    flex-shrink: 0;
+    flex-grow: 0;
+
     padding: 0 2rem;
     height: 3rem;
     background: black;
@@ -148,40 +182,37 @@
     margin: 0;
     padding: 0;
   }
+  .content {
+    position: relative;
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+  }
+  .panel {
+    position: relative;
+    height: 100%;
+    flex-shrink: 0;
+    flex-grow: 0;
+    width: 150px;
+    background: dimgray;
+  }
   .area {
-    position: absolute;
-    top: 3rem;
-    bottom: 5rem;
-    left: 150px;
-    right: 150px;
+    position: relative;
+    height: 100%;
+    flex-grow: 1;
     overflow: auto;
 
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  .panel-left {
-    position: absolute;
-    top: 3rem;
-    bottom: 0;
-    left: 0;
-    width: 150px;
-    background: dimgray;
-  }
-  .panel-right {
-    position: absolute;
-    top: 3rem;
-    bottom: 0;
-    right: 0;
-    width: 150px;
-    background: dimgray;
-  }
   .footer {
-    position: absolute;
+    position: relative;
+    width: 100%;
+    flex-shrink: 0;
+    flex-grow: 0;
+
     height: 5rem;
-    bottom: 0;
-    right: 0;
-    left: 0;
     background: black;
   }
 </style>

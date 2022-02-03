@@ -9,9 +9,6 @@ import {
   createTile,
 } from 'stores/tiles.js'
 
-export const selectedTile = writable(null)
-export const selectedElement = writable(null)
-
 export const board = writable({
   type: BOARD_TYPE.SQUARE,
   width: 15,

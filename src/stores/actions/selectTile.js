@@ -1,7 +1,9 @@
 import {
   board,
-  selectedTile,
 } from 'stores/board.js'
+import {
+  selectedTile,
+} from 'stores/game.js'
 
 let boardValue
 board.subscribe(value => {

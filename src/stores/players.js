@@ -9,6 +9,7 @@ export const createPlayer = (n) => {
   const result = writable({
     id,
     name,
+    elements: []
   })
   PLAYERS.push(result)
   PLAYERS_MAP[id] = result
