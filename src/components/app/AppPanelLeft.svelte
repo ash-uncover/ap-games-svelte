@@ -2,29 +2,32 @@
     import { onDestroy } from 'svelte'
 
     import {
-      PLAYERS_MAP,
-    } from 'stores/players.js'
+      ELEMENTS_MAP,
+    } from 'stores/elements.js'
     import {
-      activePlayer,
+      TILES_MAP,
+    } from 'stores/tiles.js'
+    import {
+      selectedTile,
     } from 'stores/game.js'
 
     // Store binding
-    let activePlayerId
-    let player
-    let unsubscribePlayer
-    const unsubcribeActivePlayer = activePlayer.subscribe(value => {
-      activePlayerId = value
-      unsubscribePlayer && unsubscribePlayer()
-      if (activePlayerId && PLAYERS_MAP[activePlayerId]) {
-        unsubscribePlayer = PLAYERS_MAP[activePlayerId].subscribe(value => {
-          player = value
+    let selectedTileId
+    let tile
+    let unsubscribeTile
+    const unsubcribeSelectedTile = selectedTile.subscribe(value => {
+      selectedTileId = value
+      unsubscribeTile && unsubscribeTile()
+      if (selectedTileId && TILES_MAP[selectedTileId]) {
+        unsubscribeTile = TILES_MAP[selectedTileId].subscribe(value => {
+          tile = value
         })
       }
     })
 
     onDestroy(() => {
       unsubcribeActivePlayer()
-      unsubscribePlayer && unsubscribePlayer()
+      unsubscribeTile && unsubscribeTile()
     })
 
   </script>
@@ -34,9 +37,19 @@
   <div
     class='app-panel-left'
   >
-    {#if player}
+    {#if tile}
       <span>
-        Current Player - <strong>{player.name}</strong>
+        Selected Tile - <strong>{tile.x}x{tile.y}</strong>
+      </span>
+      <br/>
+      {#each tile.elements as element}
+        <span>
+          Element - <strong>{element}</strong>
+        </span>
+      {/each}
+    {:else}
+      <span>
+        Select a Tile
       </span>
     {/if}
   </div>
@@ -54,6 +67,7 @@
       color: white;
 
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
     }

@@ -21,21 +21,29 @@ activePlayer.subscribe(value => {
 })
 
 export function nextActiveElement() {
-  ELEMENTS_MAP[activeElementId].update(elem => ({
-    ...elem,
-    active: false
-  }))
+  if (activeElementId) {
+    ELEMENTS_MAP[activeElementId].update(elem => ({
+      ...elem,
+      active: false
+    }))
+  }
 
   PLAYERS_MAP[activePlayerId].subscribe(player => {
     const elementIndex = player.elements.indexOf(activeElementId)
+    let nextElementId
     if (elementIndex < player.elements.length - 1) {
-      activeElement.set(player.elements[elementIndex + 1])
+      nextElementId = player.elements[elementIndex + 1]
     } else {
       const playerIndex = PLAYERS.indexOf(PLAYERS_MAP[activePlayerId])
       PLAYERS[(playerIndex + 1) % PLAYERS.length].subscribe(nextPlayer => {
-        activeElement.set(nextPlayer.elements[0])
+        nextElementId = nextPlayer.elements[0]
         activePlayer.set(nextPlayer.id)
       })()
     }
+    ELEMENTS_MAP[nextElementId].update(elem => ({
+      ...elem,
+      active: true
+    }))
+    activeElement.set(nextElementId)
   })()
 }

@@ -3,9 +3,6 @@
 
   // Store
   import {
-    board,
-  } from 'stores/board.js'
-  import {
     TILES_MAP,
   } from 'stores/tiles.js'
 
@@ -30,7 +27,7 @@
   }
 
   function handleClickTile() {
-    selectTile(x, y)
+    selectTile(id)
   }
 </script>
 
@@ -38,9 +35,21 @@
   class={buildClass(storeTile)}
   on:click={handleClickTile}
 >
-  {#if storeTile.elements.length}
-    <TileElement id={storeTile.elements[0]} />
-  {/if}
+  <img
+    class='layer background-terrain'
+    src={`images/${storeTile.terrain}.jpg`}
+    alt={storeTile.terrain}
+  />
+  <div
+    class='layer background-selection'
+  />
+  <div
+    class='layer content'
+  >
+    {#if storeTile.elements.length}
+      <TileElement id={storeTile.elements[0]} />
+    {/if}
+  </div>
 </div>
 
 <style>
@@ -55,11 +64,6 @@
     border: 1px solid lightgrey;
     user-select: none;
     cursor: pointer;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
     box-sizing: border-box;
 	}
   .tile:hover {
@@ -68,21 +72,24 @@
     border-width: 2px;
   }
 
-  .terrain-ocean {
-    background-color: blue;
+  .layer {
+    width: 100%;
+    height: 100%;
+    position: absolute;
   }
-  .terrain-plain {
-    background-color: yellow;
+  .background-selection {
+    background: black;
+    opacity: 0.2;
   }
-  .terrain-hill {
-    background-color: green;
-  }
-  .terrain-moutain {
-    background-color: brown;
+  .content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
   }
 
-  .selected {
-    background-color: white;
+  .selected .background-selection {
+    opacity: 0;
   }
   .inrange {
     background-color: lightgreen;

@@ -12,13 +12,14 @@ let eCount = 1
 export const ELEMENTS = []
 export const ELEMENTS_MAP = {}
 
-export const createElement = ({tile, type, player}) => {
+export const createElement = ({tile, type, player, active}) => {
   const id = `element-${eCount++}`
   const result = writable({
     id,
     type,
     tile,
     player,
+    active,
   })
   ELEMENTS.push(result)
   ELEMENTS_MAP[id] = result

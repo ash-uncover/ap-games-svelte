@@ -16,24 +16,36 @@
   // Properties
   export let id
 
+  $: {
+    unsuscribeElement && unsuscribeElement()
+    unsuscribeElement = ELEMENTS_MAP[id].subscribe(value => {
+      element = value
+    })
+    unsuscribePlayer && unsuscribePlayer()
+    unsuscribePlayer = PLAYERS_MAP[element.player].subscribe(value => {
+      player = value
+    })
+  }
+
   // Store binding
-  const subscribers = []
-
   let element
-  subscribers.push(ELEMENTS_MAP[id].subscribe(value => {
+  let unsuscribeElement = ELEMENTS_MAP[id].subscribe(value => {
     element = value
-  }))
+  })
   let player
-  subscribers.push(PLAYERS_MAP[element.player].subscribe(value => {
+  let unsuscribePlayer = PLAYERS_MAP[element.player].subscribe(value => {
     player = value
-  }))
+  })
 
-  onDestroy(() => subscribers.forEach((sub => sub())))
+  onDestroy(() => {
+    unsuscribeElement()
+    unsuscribePlayer()
+  })
 
-  const buildClass = ({ active }) => {
+  const buildClass = (elem, play) => {
     const aClass = ['element']
-    aClass.push(player.id)
-    if (active) {
+    aClass.push(play.id)
+    if (elem.active) {
       aClass.push('active')
     }
     return aClass.join(' ')
@@ -41,13 +53,14 @@
 
 </script>
 
-<div class={buildClass({ active: element.id === $activeElement })}>
-  {element.type[0].toUpperCase()}
+<div class={buildClass(element, player)}>
+  <div>{element.type[0].toUpperCase()}</div>
 </div>
 
 <style>
   .element {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 25px;

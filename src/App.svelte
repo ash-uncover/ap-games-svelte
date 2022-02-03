@@ -80,6 +80,7 @@
       type: ELEMENT_TYPE.TRIBE,
       tile: 'tile-1',
       player: player1Id,
+      active: true,
     })
     createElement({
       type: ELEMENT_TYPE.WARRIOR,

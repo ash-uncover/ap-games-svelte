@@ -1,33 +1,25 @@
 import {
-  board,
-} from 'stores/board.js'
-import {
   selectedTile,
 } from 'stores/game.js'
-
-let boardValue
-board.subscribe(value => {
-  boardValue = value
-})
+import {
+  TILES_MAP,
+} from 'stores/tiles.js'
 
 let selectedTileValue
 selectedTile.subscribe(value => {
   selectedTileValue = value
 })
 
-export function selectTile(x, y) {
-  if (selectedTileValue && selectedTileValue.x > -1 && selectedTileValue.y > -1) {
-    boardValue.tiles[selectedTileValue.y][selectedTileValue.x].update(tile => ({
+export function selectTile(id) {
+  if (selectedTileValue) {
+    TILES_MAP[selectedTileValue].update(tile => ({
       ...tile,
       selected: false
     }))
   }
-  boardValue.tiles[y][x].update(tile => ({
+  TILES_MAP[id].update(tile => ({
     ...tile,
     selected: true
   }))
-  selectedTile.set({
-    x,
-    y,
-  })
+  selectedTile.set(id)
 }
