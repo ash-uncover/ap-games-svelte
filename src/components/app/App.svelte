@@ -31,7 +31,6 @@
 	let height = 5
 
   function handleKeyDown(event) {
-    console.log(event)
     if ($GAME.state === GAME_STATE.PLAYER_TURN_BEFORE) {
       switch (event.code) {
         case KEY_CODES.ENTER:
@@ -57,48 +56,55 @@
     } else if ($GAME.state === GAME_STATE.PLAYER_TURN_INSIDE) {
       switch (event.code) {
         case KEY_CODES.NUMPAD_1: {
-          moveElement($BOARD, $GAME.activeElement, -1, 1) && GAME.nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, -1, 1) && $GAME.activeElement.performAction(1)
           break
         }
         case KEY_CODES.ARROW_DOWN:
         case KEY_CODES.NUMPAD_2: {
-          moveElement($BOARD, $GAME.activeElement, 0, 1) && GAME.nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, 0, 1) && $GAME.activeElement.performAction(1)
           break
         }
         case KEY_CODES.NUMPAD_3: {
-          moveElement($BOARD, $GAME.activeElement, 1, 1) && GAME.nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, 1, 1) && $GAME.activeElement.performAction(1)
           break
         }
         case KEY_CODES.ARROW_LEFT:
         case KEY_CODES.NUMPAD_4: {
-          moveElement($BOARD, $GAME.activeElement, -1, 0) && GAME.nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, -1, 0) && $GAME.activeElement.performAction(1)
           break
         }
         case KEY_CODES.NUMPAD_5:
         case KEY_CODES.SPACE: {
-          GAME.nextActiveElement()
+          $GAME.activeElement.performAction(-1)
           break
         }
         case KEY_CODES.ARROW_RIGHT:
         case KEY_CODES.NUMPAD_6: {
-          moveElement($BOARD, $GAME.activeElement, 1, 0) && GAME.nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, 1, 0) && $GAME.activeElement.performAction(1)
           break
         }
         case KEY_CODES.NUMPAD_7: {
-          moveElement($BOARD, $GAME.activeElement, -1, -1) && GAME.nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, -1, -1) && $GAME.activeElement.performAction(1)
           break
         }
         case KEY_CODES.ARROW_UP:
         case KEY_CODES.NUMPAD_8: {
-          moveElement($BOARD, $GAME.activeElement, 0, -1) && GAME.nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, 0, -1) && $GAME.activeElement.performAction(1)
           break
         }
         case KEY_CODES.NUMPAD_9: {
-          moveElement($BOARD, $GAME.activeElement, 1, -1) && GAME.nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, 1, -1) && $GAME.activeElement.performAction(1)
           break
         }
         default: {
           // Ignore
+        }
+      }
+      if ($GAME.activeElement) {
+        let activeElement
+        $GAME.activeElement.subscribe(e => activeElement = e)()
+        if (activeElement.actions === 0) {
+          GAME.nextActiveElement()
         }
       }
     }

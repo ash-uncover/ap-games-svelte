@@ -14,7 +14,6 @@ export function moveElement(board, element, deltaX, deltaY) {
   const newTile = computeTile(board, currentX, currentY, deltaX, deltaY)
   if (newTile) {
     element.setTile(newTile)
-    element.performAction(1)
     return true
   }
   return false
