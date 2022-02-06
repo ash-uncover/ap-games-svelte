@@ -60,7 +60,7 @@ export const ELEMENT_TYPE = {
   },
   WARRIOR: {
     name: 'warrior',
-    actions: 1
+    actions: 2
   },
 }
 export const ELEMENT_TYPES = Object.values(ELEMENT_TYPE)

@@ -1,13 +1,24 @@
 <script>
   import { onDestroy } from 'svelte'
+import { get_root_for_style } from 'svelte/internal';
 
   // Properties
   export let element
   let player = $element.player
 
+  let ref
+  $: if (ref && !(ref.classList.contains('active')) && $element.active) {
+    ref.scrollIntoView({
+      behavior: 'auto',
+      block: 'center',
+      inline: 'center'
+    })
+  }
+
 </script>
 
 <div
+  bind:this={ref}
   class={`element ${$player.id}`}
   class:active={$element.active}
   class:completed={$element.actions === 0}

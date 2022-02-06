@@ -25,14 +25,25 @@
   import AppPanelRight from 'components/app/AppPanelRight.svelte'
   import Board from 'components/board/Board.svelte'
   import Button from 'components/common/Button.svelte'
+  import Hexagon from 'components/common/Hexagon.svelte'
 
-  let type = BOARD_TYPE.SQUARE
-  let width = 5
-	let height = 5
+  let type = BOARD_TYPE.HEX
+  let width = 8
+	let height = 8
 
   function handleKeyDown(event) {
-    console.log(event)
-    if ($GAME.state === GAME_STATE.PLAYER_TURN_BEFORE) {
+    if ($GAME.state === GAME_STATE.GAME_NOT_STARTED) {
+      switch (event.code) {
+        case KEY_CODES.ENTER:
+        case KEY_CODES.NUMPAD_ENTER: {
+          handleGenerateBoard()
+          break
+        }
+        default: {
+          // Ignore
+        }
+      }
+    } else if ($GAME.state === GAME_STATE.PLAYER_TURN_BEFORE) {
       switch (event.code) {
         case KEY_CODES.ENTER:
         case KEY_CODES.NUMPAD_ENTER: {
@@ -57,48 +68,55 @@
     } else if ($GAME.state === GAME_STATE.PLAYER_TURN_INSIDE) {
       switch (event.code) {
         case KEY_CODES.NUMPAD_1: {
-          moveElement($BOARD, $GAME.activeElement, -1, 1) && GAME.nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, -1, 1) && $GAME.activeElement.performAction(1)
           break
         }
         case KEY_CODES.ARROW_DOWN:
         case KEY_CODES.NUMPAD_2: {
-          moveElement($BOARD, $GAME.activeElement, 0, 1) && GAME.nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, 0, 1) && $GAME.activeElement.performAction(1)
           break
         }
         case KEY_CODES.NUMPAD_3: {
-          moveElement($BOARD, $GAME.activeElement, 1, 1) && GAME.nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, 1, 1) && $GAME.activeElement.performAction(1)
           break
         }
         case KEY_CODES.ARROW_LEFT:
         case KEY_CODES.NUMPAD_4: {
-          moveElement($BOARD, $GAME.activeElement, -1, 0) && GAME.nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, -1, 0) && $GAME.activeElement.performAction(1)
           break
         }
         case KEY_CODES.NUMPAD_5:
         case KEY_CODES.SPACE: {
-          GAME.nextActiveElement()
+          $GAME.activeElement.performAction(-1)
           break
         }
         case KEY_CODES.ARROW_RIGHT:
         case KEY_CODES.NUMPAD_6: {
-          moveElement($BOARD, $GAME.activeElement, 1, 0) && GAME.nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, 1, 0) && $GAME.activeElement.performAction(1)
           break
         }
         case KEY_CODES.NUMPAD_7: {
-          moveElement($BOARD, $GAME.activeElement, -1, -1) && GAME.nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, -1, -1) && $GAME.activeElement.performAction(1)
           break
         }
         case KEY_CODES.ARROW_UP:
         case KEY_CODES.NUMPAD_8: {
-          moveElement($BOARD, $GAME.activeElement, 0, -1) && GAME.nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, 0, -1) && $GAME.activeElement.performAction(1)
           break
         }
         case KEY_CODES.NUMPAD_9: {
-          moveElement($BOARD, $GAME.activeElement, 1, -1) && GAME.nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, 1, -1) && $GAME.activeElement.performAction(1)
           break
         }
         default: {
           // Ignore
+        }
+      }
+      if ($GAME.activeElement) {
+        let activeElement
+        $GAME.activeElement.subscribe(e => activeElement = e)()
+        if (activeElement.actions === 0) {
+          GAME.nextActiveElement()
         }
       }
     }
@@ -163,6 +181,23 @@
         <Board />
       {:else}
         <div>Create a board to start</div>
+        <br/><br/><br/><br/>
+        <div style='display: flex;padding-left: 100px;'>
+          <Hexagon />
+          <Hexagon />
+          <Hexagon />
+        </div>
+        <div style='display: flex;padding-left: 100px;transform: translateX(44px);'>
+          <Hexagon />
+          <Hexagon />
+          <Hexagon />
+        </div>
+        <div style='display: flex;padding-left: 100px;'>
+          <Hexagon />
+          <Hexagon />
+          <Hexagon />
+        </div>
+
       {/if}
     </div>
 
@@ -219,6 +254,7 @@
     position: relative;
     width: 100%;
     flex-grow: 1;
+    min-height: 0;
     display: flex;
   }
   .panel {
@@ -232,12 +268,10 @@
   .area {
     position: relative;
     height: 100%;
+    min-height: 0;
+    min-width: 0;
     flex-grow: 1;
     overflow: auto;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
   .footer {
     position: relative;
