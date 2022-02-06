@@ -3,6 +3,7 @@ export const KEY_CODES = {
     ARROW_UP: 'ArrowUp',
     ARROW_RIGHT: 'ArrowRight',
     ARROW_DOWN: 'ArrowDown',
+    ENTER: 'Enter',
     NUMPAD_0: 'Numpad0',
     NUMPAD_1: 'Numpad1',
     NUMPAD_2: 'Numpad2',
@@ -13,5 +14,6 @@ export const KEY_CODES = {
     NUMPAD_7: 'Numpad7',
     NUMPAD_8: 'Numpad8',
     NUMPAD_9: 'Numpad9',
+    NUMPAD_ENTER: 'NumpadEnter',
     SPACE: 'Space',
 }

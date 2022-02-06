@@ -54,7 +54,13 @@ export const TILE_FEATURES = Object.values(TILE_FEATURE)
 // ELEMENT //
 
 export const ELEMENT_TYPE = {
-  TRIBE: 'tribe',
-  WARRIOR: 'warrior',
+  TRIBE: {
+    name: 'tribe',
+    actions: 1
+  },
+  WARRIOR: {
+    name: 'warrior',
+    actions: 1
+  },
 }
 export const ELEMENT_TYPES = Object.values(ELEMENT_TYPE)

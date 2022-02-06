@@ -2,42 +2,16 @@
   import Tile from 'components/board/Tile.svelte'
 
   import {
-    board,
+    BOARD,
   } from 'store/stores/board.js'
-  import {
-    selectedTile,
-  } from 'store/stores/game.js'
 
-  function isInSelectionRange(x, y, range = 2) {
-    if ($selectedTile && $selectedTile.x > -1 && $selectedTile.y > -1) {
-      switch ($board.type) {
-        case 'square': {
-          const xDist = Math.abs(x - $selectedTile.x)
-          const yDist = Math.abs(y - $selectedTile.y)
-          const max = Math.max(xDist, yDist)
-          return 0 < max && max <= range
-        }
-        case 'hex': {
-          const odd = $selectedTile.y % 2
-          return (
-            y === $selectedTile.y - 1 && x === $selectedTile.x - odd||
-            y === $selectedTile.y - 1 && x === $selectedTile.x + 1 - odd ||
-            y === $selectedTile.y && x === $selectedTile.x - 1 ||
-            y === $selectedTile.y && x === $selectedTile.x + 1 ||
-            y === $selectedTile.y + 1 && x === $selectedTile.x - odd ||
-            y === $selectedTile.y + 1 && x === $selectedTile.x + 1 - odd
-          )
-        }
-      }
-    }
-  }
 </script>
 
-<div class={`board ${$board.type}`}>
-  {#each $board.tiles as row, y}
+<div class={`board ${$BOARD.type}`}>
+  {#each $BOARD.tiles as row, y}
     <div class={`board-row ${y % 2 ? 'even' : 'odd'}`}>
-      {#each row as tile, x}
-        <Tile id={tile} />
+      {#each row as tile}
+        <Tile tile={tile} />
       {/each}
     </div>
   {/each}
