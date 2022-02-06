@@ -1,9 +1,11 @@
 <script>
-  export let className;
+  export let className
+  export let disabled
 </script>
 
 <button
   class={`button${className ? ` ${className}` : ''}`}
+  disabled={disabled}
   on:click
 >
   <slot />
@@ -12,6 +14,6 @@
 <style>
   .button {
     margin: 0;
-    padding: 4px;
+    padding: 4px 8px;
   }
 </style>

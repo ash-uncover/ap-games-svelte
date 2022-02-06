@@ -14,7 +14,10 @@
     {$element.id}
   </div>
   <div>
-    <strong>{$element.type}</strong>
+    <strong>{$element.type.name}</strong>
+  </div>
+  <div>
+    <strong>{$element.actions}/{$element.type.actions} Actions</strong>
   </div>
 </div>
 

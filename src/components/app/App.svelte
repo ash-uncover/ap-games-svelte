@@ -19,9 +19,7 @@
   import {
     moveElement
   } from 'store/actions/moveElement.js'
-  import {
-    nextActiveElement
-  } from 'store/actions/nextActiveElement.js'
+  import AppPlayerStart from 'components/app/AppPlayerStart.svelte'
   import AppFooter from 'components/app/AppFooter.svelte'
   import AppPanelLeft from 'components/app/AppPanelLeft.svelte'
   import AppPanelRight from 'components/app/AppPanelRight.svelte'
@@ -33,47 +31,70 @@
 	let height = 5
 
   function handleKeyDown(event) {
-    if ($GAME.activeElement) {
+    console.log(event)
+    if ($GAME.state === GAME_STATE.PLAYER_TURN_BEFORE) {
+      switch (event.code) {
+        case KEY_CODES.ENTER:
+        case KEY_CODES.NUMPAD_ENTER: {
+          GAME.startPlayerTurn()
+          break
+        }
+        default: {
+          // Ignore
+        }
+      }
+    } else if ($GAME.state === GAME_STATE.PLAYER_TURN_AFTER) {
+      switch (event.code) {
+        case KEY_CODES.ENTER:
+        case KEY_CODES.NUMPAD_ENTER: {
+          GAME.endPlayerTurn()
+          break
+        }
+        default: {
+          // Ignore
+        }
+      }
+    } else if ($GAME.state === GAME_STATE.PLAYER_TURN_INSIDE) {
       switch (event.code) {
         case KEY_CODES.NUMPAD_1: {
-          moveElement($BOARD, $GAME.activeElement, -1, 1) && nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, -1, 1) && GAME.nextActiveElement()
           break
         }
         case KEY_CODES.ARROW_DOWN:
         case KEY_CODES.NUMPAD_2: {
-          moveElement($BOARD, $GAME.activeElement, 0, 1) && nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, 0, 1) && GAME.nextActiveElement()
           break
         }
         case KEY_CODES.NUMPAD_3: {
-          moveElement($BOARD, $GAME.activeElement, 1, 1) && nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, 1, 1) && GAME.nextActiveElement()
           break
         }
         case KEY_CODES.ARROW_LEFT:
         case KEY_CODES.NUMPAD_4: {
-          moveElement($BOARD, $GAME.activeElement, -1, 0) && nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, -1, 0) && GAME.nextActiveElement()
           break
         }
         case KEY_CODES.NUMPAD_5:
         case KEY_CODES.SPACE: {
-          nextActiveElement()
+          GAME.nextActiveElement()
           break
         }
         case KEY_CODES.ARROW_RIGHT:
         case KEY_CODES.NUMPAD_6: {
-          moveElement($BOARD, $GAME.activeElement, 1, 0) && nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, 1, 0) && GAME.nextActiveElement()
           break
         }
         case KEY_CODES.NUMPAD_7: {
-          moveElement($BOARD, $GAME.activeElement, -1, -1) && nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, -1, -1) && GAME.nextActiveElement()
           break
         }
         case KEY_CODES.ARROW_UP:
         case KEY_CODES.NUMPAD_8: {
-          moveElement($BOARD, $GAME.activeElement, 0, -1) && nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, 0, -1) && GAME.nextActiveElement()
           break
         }
         case KEY_CODES.NUMPAD_9: {
-          moveElement($BOARD, $GAME.activeElement, 1, -1) && nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, 1, -1) && GAME.nextActiveElement()
           break
         }
         default: {
@@ -95,9 +116,7 @@
     element21.setTile($BOARD.tiles[$BOARD.width - 1][$BOARD.height - 1])
     const element22 = player2.createElement(ELEMENT_TYPE.WARRIOR)
     element22.setTile($BOARD.tiles[$BOARD.width - 1][$BOARD.height - 2])
-    GAME.setState(GAME_STATE.PLAYER_TURN_INSIDE)
-    GAME.setActivePlayer(player1)
-    GAME.setActiveElement(element11)
+    GAME.endPlayerTurn()
   }
 
 </script>
@@ -155,6 +174,8 @@
   <div class='footer'>
     <AppFooter />
   </div>
+
+  <AppPlayerStart />
 
 </div>
 

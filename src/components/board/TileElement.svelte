@@ -10,12 +10,17 @@
 <div
   class={`element ${$player.id}`}
   class:active={$element.active}
+  class:completed={$element.actions === 0}
 >
-  <div>{$element.type[0].toUpperCase()}</div>
+  <div>{$element.type.name[0].toUpperCase()}</div>
+  <div
+    class='layer layer-completed'
+  />
 </div>
 
 <style>
   .element {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -33,12 +38,26 @@
     font-weight: bold;
     transition: border-color 5s;
   }
-
+  .element.completed {
+    font-style: italic;
+    color: grey;
+  }
+  .element.completed .layer-completed {
+    background: rgba(0, 0, 0, 0.5);
+  }
   .element.active {
     animation: .6s ease-out 0.2s infinite alternate active;
     border-color: grey;
     border-top-color: lightgrey;
     border-left-color: lightgrey;
+  }
+
+  .layer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
   }
 
   .player-1 {

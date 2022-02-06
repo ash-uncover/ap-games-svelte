@@ -108,9 +108,18 @@ const createElement = (player, type) => {
     id: `element-${ELEMENT_ID_NUM++}`,
     player,
     type,
-    tile: null
+    tile: null,
+    actions: type.actions
   })
   const result = { subscribe }
+  result.resetActions = () => update(element => ({
+    ...element,
+    actions: type.actions
+  }))
+  result.performAction = (actions) => update(element => ({
+    ...element,
+    actions: actions === -1 ? 0 : Math.max(element.actions - actions, 0)
+  }))
   result.setActive = active => update(element => ({
     ...element,
     active
@@ -147,20 +156,59 @@ function createGame() {
       selectedTile: tile
     }
   })
-  result.setActivePlayer = (player) => update(game => {
-    game.activePlayer && game.activePlayer.setActive(false)
-    player.setActive(true)
+  result.endPlayerTurn = () => update(game => {
+    let nextPlayer = null
+    if (game.activePlayer) {
+      let previousPlayer
+      game.activePlayer.subscribe(player => previousPlayer = player)()
+      previousPlayer.elements.forEach(element => element.resetActions())
+      game.activePlayer.setActive(false)
+      const playerIndex = game.players.indexOf(game.activePlayer)
+      nextPlayer = game.players[(playerIndex + 1) % game.players.length]
+    } else {
+      nextPlayer = game.players[0]
+    }
+    let state = GAME_STATE.PLAYER_TURN_BEFORE
+    nextPlayer.setActive(true)
     return {
       ...game,
-      activePlayer: player
+      activePlayer: nextPlayer,
+      state
     }
   })
-  result.setActiveElement = (element) => update(game => {
-    game.activeElement && game.activeElement.setActive(false)
-    element.setActive(true)
+  result.startPlayerTurn = () => update(game => {
+    let activePlayer
+    game.activePlayer.subscribe(player => activePlayer = player)()
+    const activeElement = activePlayer.elements[0]
+    activeElement.setActive(true)
     return {
       ...game,
-      activeElement: element
+      activeElement,
+      state: GAME_STATE.PLAYER_TURN_INSIDE
+    }
+  })
+  result.nextActiveElement = () => update(game => {
+    let activeElement = null
+    let state = game.state
+    let activePlayer
+    game.activePlayer.subscribe(player => activePlayer = player)()
+    if (game.activeElement) {
+      game.activeElement.setActive(false)
+      const elementIndex = activePlayer.elements.indexOf(game.activeElement)
+      if (elementIndex < activePlayer.elements.length - 1) {
+        activeElement = activePlayer.elements[elementIndex + 1]
+        activeElement.setActive(true)
+      } else {
+        state = GAME_STATE.PLAYER_TURN_AFTER
+      }
+    } else {
+      activeElement = activePlayer.elements[0]
+      activeElement.setActive(true)
+    }
+    return {
+      ...game,
+      activeElement,
+      state
     }
   })
   result.addPlayer = () => {
