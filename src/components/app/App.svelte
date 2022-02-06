@@ -2,11 +2,6 @@
 
 <script>
   import {
-    dispatch,
-    registry,
-    createStore,
-  } from 'store/store.js'
-  import {
     KEY_CODES,
   } from 'util/keys.js'
   import {
@@ -18,27 +13,15 @@
   } from 'util/model.js'
 
   import {
-    board,
+    BOARD,
+    GAME,
   } from 'store/stores/board.js'
   import {
-    createElement,
-  } from 'store/stores/elements.js'
-  import {
-    gameState,
-    activeElement,
-    activePlayer,
-  } from 'store/stores/game.js'
-  import {
-    createPlayer,
-  } from 'store/stores/players.js'
-
-  import {
-    moveElement,
+    moveElement
   } from 'store/actions/moveElement.js'
   import {
-    nextActiveElement,
+    nextActiveElement
   } from 'store/actions/nextActiveElement.js'
-
   import AppFooter from 'components/app/AppFooter.svelte'
   import AppPanelLeft from 'components/app/AppPanelLeft.svelte'
   import AppPanelRight from 'components/app/AppPanelRight.svelte'
@@ -50,24 +33,24 @@
 	let height = 5
 
   function handleKeyDown(event) {
-    if ($activeElement) {
+    if ($GAME.activeElement) {
       switch (event.code) {
         case KEY_CODES.NUMPAD_1: {
-          moveElement($activeElement, -1, 1) && nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, -1, 1) && nextActiveElement()
           break
         }
         case KEY_CODES.ARROW_DOWN:
         case KEY_CODES.NUMPAD_2: {
-          moveElement($activeElement, 0, 1) && nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, 0, 1) && nextActiveElement()
           break
         }
         case KEY_CODES.NUMPAD_3: {
-          moveElement($activeElement, 1, 1) && nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, 1, 1) && nextActiveElement()
           break
         }
         case KEY_CODES.ARROW_LEFT:
         case KEY_CODES.NUMPAD_4: {
-          moveElement($activeElement, -1, 0) && nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, -1, 0) && nextActiveElement()
           break
         }
         case KEY_CODES.NUMPAD_5:
@@ -77,20 +60,20 @@
         }
         case KEY_CODES.ARROW_RIGHT:
         case KEY_CODES.NUMPAD_6: {
-          moveElement($activeElement, 1, 0) && nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, 1, 0) && nextActiveElement()
           break
         }
         case KEY_CODES.NUMPAD_7: {
-          moveElement($activeElement, -1, -1) && nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, -1, -1) && nextActiveElement()
           break
         }
         case KEY_CODES.ARROW_UP:
         case KEY_CODES.NUMPAD_8: {
-          moveElement($activeElement, 0, -1) && nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, 0, -1) && nextActiveElement()
           break
         }
         case KEY_CODES.NUMPAD_9: {
-          moveElement($activeElement, 1, -1) && nextActiveElement()
+          moveElement($BOARD, $GAME.activeElement, 1, -1) && nextActiveElement()
           break
         }
         default: {
@@ -101,33 +84,20 @@
   }
 
   function handleGenerateBoard () {
-    board.generate({ type, width, height })
-    const player1Id = createPlayer()
-    const player2Id = createPlayer()
-    const element1Id = createElement({
-      type: ELEMENT_TYPE.TRIBE,
-      tile: 'tile-1',
-      player: player1Id,
-      active: true,
-    })
-    createElement({
-      type: ELEMENT_TYPE.WARRIOR,
-      tile: 'tile-2',
-      player: player1Id,
-    })
-    createElement({
-      type: ELEMENT_TYPE.TRIBE,
-      tile: `tile-${width * height}`,
-      player: player2Id,
-    })
-    createElement({
-      type: ELEMENT_TYPE.WARRIOR,
-      tile: `tile-${width * height - 1}`,
-      player: player2Id,
-    })
-    $activePlayer = player1Id
-    $activeElement = element1Id
-    $gameState = GAME_STATE.PLAYER_TURN_INSIDE
+    BOARD.generate({ type, width, height })
+    const player1 = GAME.addPlayer()
+    const player2 = GAME.addPlayer()
+    const element11 = player1.createElement(ELEMENT_TYPE.TRIBE)
+    element11.setTile($BOARD.tiles[0][0])
+    const element12 = player1.createElement(ELEMENT_TYPE.WARRIOR)
+    element12.setTile($BOARD.tiles[0][1])
+    const element21 = player2.createElement(ELEMENT_TYPE.TRIBE)
+    element21.setTile($BOARD.tiles[$BOARD.width - 1][$BOARD.height - 1])
+    const element22 = player2.createElement(ELEMENT_TYPE.WARRIOR)
+    element22.setTile($BOARD.tiles[$BOARD.width - 1][$BOARD.height - 2])
+    GAME.setState(GAME_STATE.PLAYER_TURN_INSIDE)
+    GAME.setActivePlayer(player1)
+    GAME.setActiveElement(element11)
   }
 
 </script>
@@ -140,7 +110,7 @@
   class='app'
 >
   <div class='toolbar'>
-    {#if $gameState === GAME_STATE.GAME_NOT_STARTED}
+    {#if $GAME.state === GAME_STATE.GAME_NOT_STARTED}
       <select bind:value={type}>
         {#each BOARD_TYPES as boardType}
           <option value={boardType}>
@@ -170,7 +140,7 @@
     </div>
 
     <div class='area'>
-      {#if $gameState !== GAME_STATE.GAME_NOT_STARTED}
+      {#if $GAME.state !== GAME_STATE.GAME_NOT_STARTED}
         <Board />
       {:else}
         <div>Create a board to start</div>

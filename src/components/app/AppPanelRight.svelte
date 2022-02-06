@@ -1,67 +1,36 @@
 <script>
-    import { onDestroy } from 'svelte'
+  import {
+    GAME,
+  } from 'store/stores/board.js'
 
-    import {
-      ELEMENTS_MAP,
-    } from 'store/stores/elements.js'
-    import {
-      activeElement,
-    } from 'store/stores/game.js'
+  import AppPanelRightElement from 'components/app/AppPanelRightElement.svelte'
+</script>
 
-    // Store binding
-    let activeElementId
-    let element
-    let unsubscribeElement
-    const unsubcribeActiveElement = activeElement.subscribe(value => {
-      activeElementId = value
-      unsubscribeElement && unsubscribeElement()
-      if (activeElementId && ELEMENTS_MAP[activeElementId]) {
-        unsubscribeElement = ELEMENTS_MAP[activeElementId].subscribe(value => {
-          element = value
-        })
-      }
-    })
+<!-- RENDERING -->
 
-    onDestroy(() => {
-      unsubcribeActiveElement()
-      unsubscribeElement && unsubscribeElement()
-    })
+<div
+  class='app-panel-right'
+>
+  {#if $GAME.activeElement}
+    <AppPanelRightElement element={$GAME.activeElement} />
+  {/if}
+</div>
 
-  </script>
+<!-- STYLE -->
 
-  <!-- RENDERING -->
+<style>
+  .app-panel-right {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 
-  <div
-    class='app-panel-right'
-  >
-    {#if element}
-      <div>
-        Current Element
-      </div>
-      <div>
-        {element.id}
-      </div>
-      <div>
-        <strong>{element.type}</strong>
-      </div>
-    {/if}
-  </div>
+    color: white;
 
-  <!-- STYLE -->
-
-  <style>
-    .app-panel-right {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-
-      color: white;
-
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-  </style>
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+</style>

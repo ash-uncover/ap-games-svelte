@@ -3,41 +3,29 @@
 
   // Store
   import {
-    activeElement,
-  } from 'store/stores/game.js'
-  import {
-    TILES_MAP,
-  } from 'store/stores/tiles.js'
-
-  // Actions
-  import {
-    selectTile
-  } from 'store/actions/selectTile.js'
+    GAME,
+  } from 'store/stores/board.js'
 
   // Properties
-  export let id
-
-  let tile
-  TILES_MAP[id].subscribe(value => {
-    tile = value
-  })
+  export let tile
 
   function handleClickTile() {
-    selectTile(id)
+    GAME.selectTile(tile)
   }
 </script>
 
 <div
-  class={`tile ${tile.terrain}`}
-  class:selected={tile.selected}
+  class={`tile ${$tile.terrain}`}
+  class:selected={$tile.selected}
   on:click={handleClickTile}
 >
   <img
     class='layer'
-    src={`images/${tile.terrain}.jpg`}
-    alt={tile.terrain}
+    src={`images/${$tile.terrain}.jpg`}
+    alt={$tile.terrain}
   />
   <div
+
     class='layer layer-background'
   />
   <div
@@ -46,10 +34,10 @@
   <div
     class='layer content'
   >
-    {#if tile.elements.includes($activeElement)}
-      <TileElement id={$activeElement} />
-    {:else if tile.elements.length}
-      <TileElement id={tile.elements[tile.elements.length - 1]} />
+    {#if $tile.elements.includes($GAME.activeElement)}
+      <TileElement element={$GAME.activeElement} />
+    {:else if $tile.elements.length}
+      <TileElement element={$tile.elements[$tile.elements.length - 1]} />
     {/if}
   </div>
 </div>

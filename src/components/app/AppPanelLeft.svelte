@@ -1,76 +1,40 @@
 <script>
-    import { onDestroy } from 'svelte'
+  import {
+    GAME,
+  } from 'store/stores/board.js'
 
-    import {
-      ELEMENTS_MAP,
-    } from 'store/stores/elements.js'
-    import {
-      TILES_MAP,
-    } from 'store/stores/tiles.js'
-    import {
-      selectedTile,
-    } from 'store/stores/game.js'
+  import AppPanelLeftTile from 'components/app/AppPanelLeftTile.svelte'
+</script>
 
-    // Store binding
-    let selectedTileId
-    let tile
-    let unsubscribeTile
-    const unsubcribeSelectedTile = selectedTile.subscribe(value => {
-      selectedTileId = value
-      unsubscribeTile && unsubscribeTile()
-      if (selectedTileId && TILES_MAP[selectedTileId]) {
-        unsubscribeTile = TILES_MAP[selectedTileId].subscribe(value => {
-          tile = value
-        })
-      } else {
-        tile = null
-      }
-    })
+<!-- RENDERING -->
 
-    onDestroy(() => {
-      unsubcribeSelectedTile()
-      unsubscribeTile && unsubscribeTile()
-    })
+<div
+  class='app-panel-left'
+>
+  {#if $GAME.selectedTile}
+    <AppPanelLeftTile tile={$GAME.selectedTile} />
+  {:else}
+    <span>
+      Select a Tile
+    </span>
+  {/if}
+</div>
 
-  </script>
+<!-- STYLE -->
 
-  <!-- RENDERING -->
+<style>
+  .app-panel-left {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 
-  <div
-    class='app-panel-left'
-  >
-    {#if tile}
-      <span>
-        Selected Tile - <strong>{tile.x}x{tile.y}</strong>
-      </span>
-      <br/>
-      {#each tile.elements as element}
-        <span>
-          Element - <strong>{element}</strong>
-        </span>
-      {/each}
-    {:else}
-      <span>
-        Select a Tile
-      </span>
-    {/if}
-  </div>
+    color: white;
 
-  <!-- STYLE -->
-
-  <style>
-    .app-panel-left {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-
-      color: white;
-
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-  </style>
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+</style>

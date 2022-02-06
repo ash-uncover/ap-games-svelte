@@ -1,32 +1,7 @@
 <script>
-  import { onDestroy } from 'svelte'
-
   import {
-    PLAYERS_MAP,
-  } from 'store/stores/players.js'
-  import {
-    activePlayer,
-  } from 'store/stores/game.js'
-
-  // Store binding
-  let activePlayerId
-  let player
-  let unsubscribePlayer
-  const unsubcribeActivePlayer = activePlayer.subscribe(value => {
-    activePlayerId = value
-    unsubscribePlayer && unsubscribePlayer()
-    if (activePlayerId && PLAYERS_MAP[activePlayerId]) {
-      unsubscribePlayer = PLAYERS_MAP[activePlayerId].subscribe(value => {
-        player = value
-      })
-    }
-  })
-
-  onDestroy(() => {
-    unsubcribeActivePlayer()
-    unsubscribePlayer && unsubscribePlayer()
-  })
-
+    GAME,
+  } from 'store/stores/board.js'
 </script>
 
 <!-- RENDERING -->
@@ -34,9 +9,9 @@
 <div
   class='app-footer'
 >
-  {#if player}
+  {#if $GAME.activePlayer}
     <span>
-      Current Player - <strong>{player.name}</strong>
+      Current Player - <strong>{$GAME.activePlayer.name}</strong>
     </span>
   {/if}
 </div>

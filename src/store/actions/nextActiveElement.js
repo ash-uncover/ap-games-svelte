@@ -1,49 +1,22 @@
+import {
+  GAME,
+} from 'store/stores/board.js'
 
-import {
-  activeElement,
-  activePlayer,
-} from 'store/stores/game.js'
-import {
-  ELEMENTS_MAP,
-} from 'store/stores/elements.js'
-import {
-  PLAYERS,
-  PLAYERS_MAP,
-} from 'store/stores/players.js'
-
-let activeElementId
-activeElement.subscribe(value => {
-  activeElementId = value
-})
-let activePlayerId
-activePlayer.subscribe(value => {
-  activePlayerId = value
-})
+let game
+GAME.subscribe(v => game = v)
 
 export function nextActiveElement() {
-  if (activeElementId) {
-    ELEMENTS_MAP[activeElementId].update(elem => ({
-      ...elem,
-      active: false
-    }))
+  let activePlayer
+  game.activePlayer.subscribe(player => activePlayer = player)()
+  const elementIndex = activePlayer.elements.indexOf(game.activeElement)
+  let nextElement
+  if (elementIndex < activePlayer.elements.length - 1) {
+    nextElement = activePlayer.elements[elementIndex + 1]
+    GAME.setActiveElement(nextElement)
+  } else {
+    const playerIndex = game.players.indexOf(game.activePlayer)
+    const nextPlayer = game.players[(playerIndex + 1) % game.players.length]
+    nextPlayer.subscribe(v => GAME.setActiveElement(v.elements[0]))()
+    GAME.setActivePlayer(nextPlayer)
   }
-
-  PLAYERS_MAP[activePlayerId].subscribe(player => {
-    const elementIndex = player.elements.indexOf(activeElementId)
-    let nextElementId
-    if (elementIndex < player.elements.length - 1) {
-      nextElementId = player.elements[elementIndex + 1]
-    } else {
-      const playerIndex = PLAYERS.indexOf(PLAYERS_MAP[activePlayerId])
-      PLAYERS[(playerIndex + 1) % PLAYERS.length].subscribe(nextPlayer => {
-        nextElementId = nextPlayer.elements[0]
-        activePlayer.set(nextPlayer.id)
-      })()
-    }
-    ELEMENTS_MAP[nextElementId].update(elem => ({
-      ...elem,
-      active: true
-    }))
-    activeElement.set(nextElementId)
-  })()
 }

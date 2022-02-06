@@ -1,51 +1,17 @@
 <script>
   import { onDestroy } from 'svelte'
 
-  // Import Stores
-  import {
-    ELEMENTS_MAP
-  } from 'store/stores/elements.js'
-  import {
-    PLAYERS_MAP
-  } from 'store/stores/players.js'
-
   // Properties
-  export let id
-
-  // Store binding
-  let element
-  let unsuscribeElement = ELEMENTS_MAP[id].subscribe(value => {
-    element = value
-  })
-  let player
-  let unsuscribePlayer = PLAYERS_MAP[element.player].subscribe(value => {
-    player = value
-  })
-
-  onDestroy(() => {
-    unsuscribeElement()
-    unsuscribePlayer()
-  })
-
-  // Store reactivity
-  $: if (id !== element.id) {
-    unsuscribeElement && unsuscribeElement()
-    unsuscribeElement = ELEMENTS_MAP[id].subscribe(value => {
-      element = value
-    })
-    unsuscribePlayer && unsuscribePlayer()
-    unsuscribePlayer = PLAYERS_MAP[element.player].subscribe(value => {
-      player = value
-    })
-  }
+  export let element
+  let player = $element.player
 
 </script>
 
 <div
-  class={`element ${player.id}`}
-  class:active={element.active}
+  class={`element ${$player.id}`}
+  class:active={$element.active}
 >
-  <div>{element.type[0].toUpperCase()}</div>
+  <div>{$element.type[0].toUpperCase()}</div>
 </div>
 
 <style>

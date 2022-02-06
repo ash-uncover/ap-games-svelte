@@ -1,50 +1,20 @@
 import {
-  board,
-} from 'store/stores/board.js'
-import {
-  ELEMENTS_MAP,
-} from 'store/stores/elements.js'
-import {
-  TILES_MAP,
-} from 'store/stores/tiles.js'
+  computeTile
+} from 'util/board.js'
 
-let boardValue
-board.subscribe(value => {
-  boardValue = value
-})
-
-export function moveElement(id, deltaX, deltaY) {
-  let result = false
-  ELEMENTS_MAP[id].update(element => {
-    let currentX
-    let currentY
-    TILES_MAP[element.tile].subscribe(tile => {
-      currentX = tile.x
-      currentY = tile.y
+export function moveElement(board, element, deltaX, deltaY) {
+  let currentX
+  let currentY
+  element.subscribe(e => {
+    e.tile.subscribe(t => {
+      currentX = t.x
+      currentY = t.y
     })()
-    const newX = currentX + deltaX
-    const newY = currentY + deltaY
-    const validX = deltaX ? (-1 < newX && newX < boardValue.width) : true
-    const validY = deltaY ? (-1 < newY && newY < boardValue.height) : true
-    if (validX && validY) {
-      TILES_MAP[element.tile].update(tile => {
-        tile.elements.splice(tile.elements.indexOf(id), 1)
-        return {
-          ...tile,
-        }
-      })
-      const newTileId = boardValue.tiles[newY][newX]
-      TILES_MAP[newTileId].update(tile => ({
-        ...tile,
-        elements: [...tile.elements, id],
-      }))
-      result = true
-      return {
-        ...element,
-        tile: newTileId
-      }
-    }
-    return element
-  })
-  return result
+  })()
+  const newTile = computeTile(board, currentX, currentY, deltaX, deltaY)
+  if (newTile) {
+    element.setTile(newTile)
+    return true
+  }
+  return false
 }
