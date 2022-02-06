@@ -1,35 +1,38 @@
 import { writable } from 'svelte/store'
 
-import {
-  PLAYERS_MAP,
-} from 'store/stores/players.js'
-import {
-  TILES_MAP,
-} from 'store/stores/tiles.js'
+let ID_NUM = 1
+export const ELEMENTS = {}
 
-let eCount = 1
-
-export const ELEMENTS = []
-export const ELEMENTS_MAP = {}
-
-export const createElement = ({tile, type, player, active}) => {
-  const id = `element-${eCount++}`
-  const result = writable({
+export const createElement = ({ player, type }) => {
+  const id = `element-${ID_NUM++}`
+  const { subscribe, set, update } = writable({
     id,
-    type,
-    tile,
     player,
-    active,
+    type,
   })
-  ELEMENTS.push(result)
-  ELEMENTS_MAP[id] = result
-  PLAYERS_MAP[player].update(player => ({
-    ...player,
-    elements: [...player.elements, id]
-  }))
-  TILES_MAP[tile].update(tile => ({
-    ...tile,
-    elements: [...tile.elements, id]
-  }))
-  return id
+  const result = {
+    subscribe,
+    handleAddTileElement: (element, tile) => {
+      if (element === result) {
+        update(elem => ({
+          ...elem,
+          tile
+        }))
+      }
+    },
+    handleRemoveTileElement: (element) => {
+      if (element === result) {
+        update(element => ({
+          ...element,
+          tile: null
+        }))
+      }
+    }
+  }
+  ELEMENTS [id] = result
+  return result
+}
+
+export const deleteElement = ({id}) => {
+  delete ELEMENTS[id]
 }

@@ -1,17 +1,27 @@
 import { writable } from 'svelte/store'
 
-export const PLAYERS = []
-export const PLAYERS_MAP = {}
+let ID_NUM = 1
+export const PLAYERS = {}
 
-export const createPlayer = (n) => {
+export const createPlayer = ({}) => {
   const id = `player-${PLAYERS.length + 1}`
-  const name = n || `Player ${PLAYERS.length + 1}`
-  const result = writable({
+  const name = name || `Player ${PLAYERS.length + 1}`
+  const { subscribe, set, update } = writable({
     id,
     name,
-    elements: []
+    elements: [],
   })
-  PLAYERS.push(result)
-  PLAYERS_MAP[id] = result
-  return id
+  const result = {
+    subscribe,
+    addElement: (element) => update(player => ({
+      ...player,
+      elements: [...player.elements, element]
+    })),
+    removeElement: (element) => update(player => ({
+      ...player,
+      elements: player.elements.remove(player.elements.index)
+    })),
+  }
+  PLAYERS[id] = result
+  return result
 }

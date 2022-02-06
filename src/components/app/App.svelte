@@ -2,9 +2,9 @@
 
 <script>
   import {
-    dispatcher,
+    dispatch,
+    registry,
     createStore,
-    registry
   } from 'store/store.js'
   import {
     KEY_CODES,
@@ -18,7 +18,7 @@
   } from 'util/model.js'
 
   import {
-    generateBoard,
+    board,
   } from 'store/stores/board.js'
   import {
     createElement,
@@ -48,7 +48,6 @@
   let type = BOARD_TYPE.SQUARE
   let width = 5
 	let height = 5
-  let generated = false
 
   function handleKeyDown(event) {
     if ($activeElement) {
@@ -102,7 +101,7 @@
   }
 
   function handleGenerateBoard () {
-    generateBoard(type, width, height)
+    board.generate({ type, width, height })
     const player1Id = createPlayer()
     const player2Id = createPlayer()
     const element1Id = createElement({

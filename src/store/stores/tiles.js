@@ -1,19 +1,23 @@
 import { writable } from 'svelte/store'
 
-export const TILES = []
-export const TILES_MAP = {}
+let id = 1
+export const TILES = {}
 
 export const createTile = ({x, y, terrain}) => {
-  const id = `tile-${TILES.length + 1}`
-  const result = writable({
+  const id = `tile-${id++}`
+  const { subscribe, set, update } = writable({
     id,
     x,
     y,
     terrain,
-    selected: false,
-    elements: []
   })
-  TILES.push(result)
-  TILES_MAP[id] = result
-  return id
+  const result = {
+    subscribe
+  }
+  TILES[id] = result
+  return result
+}
+
+export const deleteTile = ({id}) => {
+  delete TILES[id]
 }
