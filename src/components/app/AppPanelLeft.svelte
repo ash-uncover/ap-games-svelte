@@ -2,6 +2,9 @@
   import {
     GAME,
   } from 'store/stores/board.js'
+  import {
+    GAME_STATE,
+  } from 'util/model.js'
 
   import AppPanelLeftTile from 'components/app/AppPanelLeftTile.svelte'
 </script>
@@ -11,12 +14,14 @@
 <div
   class='app-panel-left'
 >
-  {#if $GAME.selectedTile}
-    <AppPanelLeftTile tile={$GAME.selectedTile} />
-  {:else}
-    <span>
-      Select a Tile
-    </span>
+  {#if $GAME.state !== GAME_STATE.GAME_NOT_STARTED}
+    {#if $GAME.selectedTile}
+      <AppPanelLeftTile tile={$GAME.selectedTile} />
+    {:else}
+      <span>
+        Select a Tile
+      </span>
+    {/if}
   {/if}
 </div>
 

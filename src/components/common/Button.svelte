@@ -1,6 +1,6 @@
 <script>
-  export let className
-  export let disabled
+  export let className = ''
+  export let disabled = false
 </script>
 
 <button

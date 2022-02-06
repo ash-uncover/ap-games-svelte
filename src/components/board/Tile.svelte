@@ -4,6 +4,7 @@
   // Store
   import {
     GAME,
+    BOARD,
   } from 'store/stores/board.js'
 
   // Properties
@@ -25,7 +26,6 @@
     alt={$tile.terrain}
   />
   <div
-
     class='layer layer-background'
   />
   <div

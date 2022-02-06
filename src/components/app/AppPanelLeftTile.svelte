@@ -10,16 +10,31 @@
   class='app-panel-left-tile'
 >
   <div>
-    Selected Tile - <strong>{$tile.x}x{$tile.y}</strong>
+    Tile <strong>{$tile.x}x{$tile.y}</strong>
   </div>
   <br/>
-  {#each $tile.elements as element}
-    <AppPanelLeftTileElement element={element} />
-  {/each}
+  <div>
+    Terrain:
+  </div>
+  <div>
+    {$tile.terrain}
+  </div>
+  <br/>
+  {#if $tile.elements.length}
+    <div>
+      Elements:
+      {#each $tile.elements as element}
+        <AppPanelLeftTileElement element={element} />
+      {/each}
+    </div>
+  {/if}
 </div>
 
 <!-- STYLE -->
 
 <style>
+  .app-panel-left-tile {
+    text-align: center;
+  }
 
 </style>

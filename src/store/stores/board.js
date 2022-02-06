@@ -51,14 +51,22 @@ function createBoard() {
 		subscribe,
 		generate: ({ type, width, height }) => {
       const tiles = []
+      const midWidth = (width + width%2)/2
+      const midHeight = (height + height%2)/2
       for (let y = 0 ; y < height ; y++) {
         const row = []
         tiles.push(row)
         for (let x = 0 ; x < (width + (type === BOARD_TYPE.HEX ? (y)%2 : 0)) ; x++) {
+          const distXRaw = Math.abs(x + 1 - midWidth)
+          const distX = Math.round(distXRaw * 4 / midWidth)
+          const distYRaw = Math.abs(y + 1 - midHeight)
+          const distY = Math.round(distYRaw * 4 / midHeight)
+          const dist = Math.max(distX, distY)
+          const terrain = TILE_TERRAINS[TILE_TERRAINS.length - (dist ? dist : 1)]
           const tile = createTile({
             x,
             y,
-            terrain: TILE_TERRAINS[(x+y)%TILE_TERRAINS.length],
+            terrain,
           })
           row.push(tile)
         }
