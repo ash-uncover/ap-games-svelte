@@ -28,8 +28,8 @@
   import Hexagon from 'components/common/Hexagon.svelte'
 
   let type = BOARD_TYPE.HEX
-  let width = 8
-	let height = 8
+  let width = 15
+	let height = 15
 
   function handleKeyDown(event) {
     if ($GAME.state === GAME_STATE.GAME_NOT_STARTED) {
@@ -271,7 +271,7 @@
     min-height: 0;
     min-width: 0;
     flex-grow: 1;
-    overflow: auto;
+    overflow: hidden;
   }
   .footer {
     position: relative;

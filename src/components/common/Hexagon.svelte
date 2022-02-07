@@ -2,6 +2,8 @@
   export let image
   export let borderWidth = '1px'
   export let borderColor = 'white'
+  export let border2Color = 'transparent'
+  export let border3Color = 'transparent'
 </script>
 
 <div
