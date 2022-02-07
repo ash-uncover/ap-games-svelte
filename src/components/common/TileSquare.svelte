@@ -10,7 +10,7 @@
 >
   <img
     class='layer'
-    src={`images/${terrain}.jpg`}
+    src={`assets/images/${terrain}.jpg`}
     alt={terrain}
   />
   <div

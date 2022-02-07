@@ -9,7 +9,7 @@
 >
   <div
     class='layer layer-border'
-    style={`background:${borderColor};`}
+    style={`background-color:${borderColor};`}
   >
     <div
       class='layer layer-content'
@@ -44,6 +44,9 @@
   }
   .layer {
     clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
+    transition-property: top, bottom, left, right;
+    transition-duration: 0.25s;
+    transition-timing-function: ease-out;
   }
   .layer-border {
     display: inline-block;
@@ -52,6 +55,7 @@
     height: calc(100% * 4 / 3);
     box-sizing: border-box;
     cursor: pointer;
+    transition: background-color 0.5s ease-out;
   }
   .layer-content {
     position: absolute;

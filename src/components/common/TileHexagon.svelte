@@ -24,7 +24,7 @@
   on:click
 >
   <Hexagon
-    image={`images/${terrain}.jpg`}
+    image={`assets/images/${terrain}.jpg`}
     borderColor={selected ? 'yellow' : borderColor}
     borderWidth={selected ? '3px' : borderWidth}
   >

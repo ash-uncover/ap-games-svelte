@@ -58,6 +58,9 @@
     padding: 30px;
     width: fit-content;
   }
+  .drag {
+    cursor: url('/assets/cursor/Move.png'), auto;
+  }
   .drag > * {
     pointer-events: none;
   }
