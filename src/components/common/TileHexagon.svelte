@@ -19,6 +19,7 @@
 </script>
 
 <div
+  class='tile-hexagon'
   on:mouseenter={handleMouseEnter}
   on:mouseleave={handleMouseLeave}
   on:click
@@ -35,4 +36,7 @@
 </div>
 
 <style>
+  .tile-hexagon {
+    cursor: pointer;
+  }
 </style>

@@ -10,14 +10,14 @@
   let dragStart
 
   function handleMouseDown(event) {
+    clearTimeout(dragTimeout)
     dragTimeout = setTimeout(() => {
+      clearTimeout(dragTimeout)
       dragStart = {
-        x: event.clientX,
-        y: event.clientY,
         scrollTop: ref.parentElement.scrollTop,
         scrollLeft: ref.parentElement.scrollLeft,
       }
-    }, 100)
+    }, 150)
   }
 
   function handleMouseUp() {
@@ -27,8 +27,13 @@
 
   function handleMouseMove(event) {
     if (dragStart) {
-      ref.parentElement.scrollTop = dragStart.scrollTop - event.clientY + dragStart.y
-      ref.parentElement.scrollLeft = dragStart.scrollLeft - event.clientX + dragStart.x
+      if (dragStart.x || dragStart.y) {
+        ref.parentElement.scrollTop = dragStart.scrollTop - event.clientY + dragStart.y
+        ref.parentElement.scrollLeft = dragStart.scrollLeft - event.clientX + dragStart.x
+      } else {
+        dragStart.x = event.clientX
+        dragStart.y = event.clientY
+      }
     }
   }
 
@@ -58,10 +63,10 @@
     padding: 30px;
     width: fit-content;
   }
-  .drag {
-    cursor: url('/assets/cursor/Move.png'), auto;
+  .board.drag:hover {
+    cursor: url('/assets/cursor/Move.png'), auto !important;
   }
-  .drag > * {
+  .board.drag > * {
     pointer-events: none;
   }
   .board-row {

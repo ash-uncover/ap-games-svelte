@@ -56,7 +56,6 @@
     width: 100%;
     height: calc(100% * 4 / 3);
     box-sizing: border-box;
-    cursor: pointer;
     transition: background-color 0.5s ease-out;
   }
   .layer-content {
