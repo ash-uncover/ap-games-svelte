@@ -1,5 +1,5 @@
 <script>
-  import Tile from 'components/board/Tile.svelte'
+  import BoardTile from 'components/board/BoardTile.svelte'
 
   import {
     BOARD,
@@ -45,11 +45,7 @@
   {#each $BOARD.tiles as row, y}
     <div class={`board-row ${y % 2 ? 'even' : 'odd'}`}>
       {#each row as tile}
-        {#if $BOARD.type === 'hex'}
-          <Tile tile={tile} />
-        {:else}
-          <Tile tile={tile} />
-        {/if}
+        <BoardTile tile={tile} />
       {/each}
     </div>
   {/each}
@@ -70,6 +66,6 @@
     align-items: center;
   }
   .board.hex .odd {
-    margin-left: 48px
+    margin-left: 44px
   }
 </style>

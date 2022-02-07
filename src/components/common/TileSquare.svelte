@@ -1,29 +1,17 @@
 <script>
-  import TileElement from 'components/board/TileElement.svelte'
-
-  // Store
-  import {
-    GAME,
-    BOARD,
-  } from 'store/stores/board.js'
-
-  // Properties
-  export let tile
-
-  function handleClickTile() {
-    GAME.selectTile(tile)
-  }
+  export let terrain
+  export let selected
 </script>
 
 <div
-  class={`tile ${$tile.terrain}`}
-  class:selected={$tile.selected}
-  on:click={handleClickTile}
+  class='tile'
+  class:selected
+  on:click
 >
   <img
     class='layer'
-    src={`images/${$tile.terrain}.jpg`}
-    alt={$tile.terrain}
+    src={`images/${terrain}.jpg`}
+    alt={terrain}
   />
   <div
     class='layer layer-background'
@@ -34,11 +22,7 @@
   <div
     class='layer content'
   >
-    {#if $tile.elements.includes($GAME.activeElement)}
-      <TileElement element={$GAME.activeElement} />
-    {:else if $tile.elements.length}
-      <TileElement element={$tile.elements[$tile.elements.length - 1]} />
-    {/if}
+    <slot name='elements'></slot>
   </div>
 </div>
 
@@ -86,7 +70,4 @@
     border: 2px solid lightgrey;
   }
 
-  .inrange {
-    background-color: lightgreen;
-  }
 </style>

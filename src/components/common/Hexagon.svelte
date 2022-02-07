@@ -1,19 +1,37 @@
 <script>
+  export let image
+  export let borderWidth = '1px'
+  export let borderColor = 'white'
 </script>
 
 <div
   class='hexagon'
 >
   <div
-    class='inner clip'
+    class='layer layer-border'
+    style={`background:${borderColor};`}
   >
-    <div class='background clip'>
-      <img
-        class='image'
-        src='images/test.jpg'
-        alt='test'
-        draggable='false'
-      />
+    <div
+      class='layer layer-content'
+      style={`top:${borderWidth};bottom:${borderWidth};right:${borderWidth};left:${borderWidth};`}
+    >
+      <div
+        class='layer layer-background '
+        style={`top:-${borderWidth};bottom:-${borderWidth};right:-${borderWidth};left:-${borderWidth};`}
+      >
+        <img
+          class='image'
+          src={image}
+          alt='test'
+          draggable='false'
+        />
+      </div>
+      <div
+        class='layer layer-elements'
+        style={`top:-${borderWidth};bottom:-${borderWidth};right:-${borderWidth};left:-${borderWidth};`}
+      >
+        <slot />
+      </div>
     </div>
   </div>
 </div>
@@ -22,37 +40,36 @@
   .hexagon {
     width: 88px;
     height: 75px;
-    z-index: 1;
     user-select: none;
   }
-  .inner {
+  .layer {
+    clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
+  }
+  .layer-border {
     display: inline-block;
     position: relative;
     width: 100%;
     height: calc(100% * 4 / 3);
     box-sizing: border-box;
-    background: lightgrey;
     cursor: pointer;
   }
-  .clip {
-    clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
-  }
-  .inner:hover {
-    background: green;
-  }
-  .background {
+  .layer-content {
     position: absolute;
-    background-color: orange;
-    top: 2px;
-    left: 2px;
-    bottom: 2px;
-    right: 2px;
+    overflow: hidden;
   }
-
+  .layer-background {
+    position: absolute;
+  }
   .image {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
+  }
+  .layer-elements {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 </style>
