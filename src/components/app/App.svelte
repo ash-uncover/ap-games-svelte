@@ -6,9 +6,7 @@
   } from 'util/keys.js'
   import {
     GAME_STATE,
-    BOARD_TYPE,
   } from 'util/model.js'
-
   import {
     BOARD,
     GAME,
@@ -16,6 +14,7 @@
   import {
     moveElement
   } from 'store/actions/moveElement.js'
+
   import AppPlayerStart from 'components/app/AppPlayerStart.svelte'
   import AppFooter from 'components/app/AppFooter.svelte'
   import AppPanelLeft from 'components/app/AppPanelLeft.svelte'
@@ -24,18 +23,7 @@
   import Hexagon from 'components/common/Hexagon.svelte'
 
   function handleKeyDown(event) {
-    if ($GAME.state === GAME_STATE.GAME_NOT_STARTED) {
-      switch (event.code) {
-        case KEY_CODES.ENTER:
-        case KEY_CODES.NUMPAD_ENTER: {
-          handleGenerateBoard()
-          break
-        }
-        default: {
-          // Ignore
-        }
-      }
-    } else if ($GAME.state === GAME_STATE.PLAYER_TURN_BEFORE) {
+    if ($GAME.state === GAME_STATE.PLAYER_TURN_BEFORE) {
       switch (event.code) {
         case KEY_CODES.ENTER:
         case KEY_CODES.NUMPAD_ENTER: {
@@ -132,28 +120,7 @@
     </div>
 
     <div class='area'>
-      {#if $GAME.state !== GAME_STATE.GAME_NOT_STARTED}
-        <Board />
-      {:else}
-        <div>Create a board to start</div>
-        <br/><br/><br/><br/>
-        <div style='display: flex;padding-left: 100px;'>
-          <Hexagon />
-          <Hexagon />
-          <Hexagon />
-        </div>
-        <div style='display: flex;padding-left: 100px;transform: translateX(44px);'>
-          <Hexagon />
-          <Hexagon />
-          <Hexagon />
-        </div>
-        <div style='display: flex;padding-left: 100px;'>
-          <Hexagon />
-          <Hexagon />
-          <Hexagon />
-        </div>
-
-      {/if}
+      <Board />
     </div>
 
     <div class='panel panel-right'>
