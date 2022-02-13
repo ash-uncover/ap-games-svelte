@@ -6,33 +6,27 @@
   } from 'store/stores/board.js'
 
   let ref
-  let dragTimeout
   let dragStart
 
-  function handleMouseDown(event) {
-    clearTimeout(dragTimeout)
-    dragTimeout = setTimeout(() => {
-      clearTimeout(dragTimeout)
-      dragStart = {
-        scrollTop: ref.parentElement.scrollTop,
-        scrollLeft: ref.parentElement.scrollLeft,
-      }
-    }, 150)
+  function handleMouseDown() {
+    ref.addEventListener('mousemove', handleMouseMove)
   }
 
   function handleMouseUp() {
-    clearTimeout(dragTimeout)
+    ref.removeEventListener('mousemove', handleMouseMove)
     dragStart = null
   }
 
   function handleMouseMove(event) {
     if (dragStart) {
-      if (dragStart.x || dragStart.y) {
-        ref.parentElement.scrollTop = dragStart.scrollTop - event.clientY + dragStart.y
-        ref.parentElement.scrollLeft = dragStart.scrollLeft - event.clientX + dragStart.x
-      } else {
-        dragStart.x = event.clientX
-        dragStart.y = event.clientY
+      ref.parentElement.scrollTop = dragStart.scrollTop - event.clientY + dragStart.y
+      ref.parentElement.scrollLeft = dragStart.scrollLeft - event.clientX + dragStart.x
+    } else {
+      dragStart = {
+        x: event.clientX,
+        y: event.clientY,
+        scrollTop: ref.parentElement.scrollTop,
+        scrollLeft: ref.parentElement.scrollLeft,
       }
     }
   }
@@ -45,7 +39,6 @@
   class:drag={Boolean(dragStart)}
   on:mousedown={handleMouseDown}
   on:mouseup={handleMouseUp}
-  on:mousemove={handleMouseMove}
 >
   {#each $BOARD.tiles as row, y}
     <div class={`board-row ${y % 2 ? 'even' : 'odd'}`}>

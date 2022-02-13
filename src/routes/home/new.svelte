@@ -5,9 +5,11 @@
     KEY_CODES,
   } from 'util/keys.js'
   import {
-    BOARD,
-    GAME,
-  } from 'store/stores/board.js'
+    APP,
+  } from 'store/stores/app.js'
+  import {
+    startGame,
+  } from 'store/actions/startGame.js'
   import {
     APP_ROUTE,
   } from 'util/routes.js'
@@ -20,24 +22,15 @@
   import HomeMenu from 'components/home/HomeMenu.svelte'
   import HomeMenuEntry from 'components/home/HomeMenuEntry.svelte'
   import HomeMenuNavigation from 'components/home/HomeMenuNavigation.svelte'
+  import HomeMenuButton from 'components/home/HomeMenuButton.svelte'
 
   let type = BOARD_TYPE.HEX
   let width = 15
 	let height = 15
 
   function handleGenerateBoard () {
-    BOARD.generate({ type, width, height })
-    const player1 = GAME.addPlayer()
-    const player2 = GAME.addPlayer()
-    const element11 = player1.createElement(ELEMENT_TYPE.TRIBE)
-    element11.setTile($BOARD.tiles[0][0])
-    const element12 = player1.createElement(ELEMENT_TYPE.WARRIOR)
-    element12.setTile($BOARD.tiles[0][1])
-    const element21 = player2.createElement(ELEMENT_TYPE.TRIBE)
-    element21.setTile($BOARD.tiles[$BOARD.width - 1][$BOARD.height - 1])
-    const element22 = player2.createElement(ELEMENT_TYPE.WARRIOR)
-    element22.setTile($BOARD.tiles[$BOARD.width - 1][$BOARD.height - 2])
-    GAME.endPlayerTurn()
+    startGame(type, width, height)
+    APP.navigate(APP_ROUTE.GAME)
   }
 
 </script>
@@ -70,9 +63,10 @@
     </HomeMenuEntry>
 
     <HomeMenuEntry>
-      <button on:click={handleGenerateBoard}>
-        Generate
-      </button>
+      <HomeMenuButton
+        text='Start Game'
+        on:click={handleGenerateBoard}
+      />
     </HomeMenuEntry>
 
     <HomeMenuEntry>

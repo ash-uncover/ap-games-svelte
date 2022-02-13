@@ -20,6 +20,9 @@
 <Home>
   <HomeMenu title='Options'>
     <HomeMenuEntry>
+      Not Implemented
+    </HomeMenuEntry>
+    <HomeMenuEntry>
       <HomeMenuNavigation text='Back' route={APP_ROUTE.HOME} />
     </HomeMenuEntry>
   </HomeMenu>

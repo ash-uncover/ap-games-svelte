@@ -7,9 +7,6 @@
   import {
     GAME_STATE,
     BOARD_TYPE,
-    BOARD_TYPES,
-    ELEMENT_TYPE,
-    ELEMENT_TYPES,
   } from 'util/model.js'
 
   import {
@@ -24,12 +21,7 @@
   import AppPanelLeft from 'components/app/AppPanelLeft.svelte'
   import AppPanelRight from 'components/app/AppPanelRight.svelte'
   import Board from 'components/board/Board.svelte'
-  import Button from 'components/common/Button.svelte'
   import Hexagon from 'components/common/Hexagon.svelte'
-
-  let type = BOARD_TYPE.HEX
-  let width = 15
-	let height = 15
 
   function handleKeyDown(event) {
     if ($GAME.state === GAME_STATE.GAME_NOT_STARTED) {
@@ -122,21 +114,6 @@
     }
   }
 
-  function handleGenerateBoard () {
-    BOARD.generate({ type, width, height })
-    const player1 = GAME.addPlayer()
-    const player2 = GAME.addPlayer()
-    const element11 = player1.createElement(ELEMENT_TYPE.TRIBE)
-    element11.setTile($BOARD.tiles[0][0])
-    const element12 = player1.createElement(ELEMENT_TYPE.WARRIOR)
-    element12.setTile($BOARD.tiles[0][1])
-    const element21 = player2.createElement(ELEMENT_TYPE.TRIBE)
-    element21.setTile($BOARD.tiles[$BOARD.width - 1][$BOARD.height - 1])
-    const element22 = player2.createElement(ELEMENT_TYPE.WARRIOR)
-    element22.setTile($BOARD.tiles[$BOARD.width - 1][$BOARD.height - 2])
-    GAME.endPlayerTurn()
-  }
-
 </script>
 
 <!-- RENDERING -->
@@ -147,28 +124,6 @@
   class='app'
 >
   <div class='toolbar'>
-    {#if $GAME.state === GAME_STATE.GAME_NOT_STARTED}
-      <select bind:value={type}>
-        {#each BOARD_TYPES as boardType}
-          <option value={boardType}>
-            {boardType}
-          </option>
-        {/each}
-      </select>
-
-
-      <label for='inputWidth' class='label'>Width:</label>
-      <input id='inputWidth' type=number bind:value={width} min=3 max=100>
-
-      <label for='inputHeight' class='label'>Height:</label>
-      <input id='inputHeight' type=number bind:value={height} min=3 max=100>
-
-      <span class='label'>New Board:</span>
-      <Button on:click={handleGenerateBoard}>
-        Generate
-      </Button>
-
-    {/if}
   </div>
 
   <div class='content'>
@@ -241,14 +196,6 @@
 
     display: flex;
     align-items: center;
-  }
-  .label {
-    margin-left: 1rem;
-    margin-right: 0.5rem;
-  }
-  input, select {
-    margin: 0;
-    padding: 0;
   }
   .content {
     position: relative;
