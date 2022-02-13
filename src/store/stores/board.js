@@ -158,10 +158,14 @@ function createGame() {
   }))
   result.selectTile = (tile) => update(game => {
     game.selectedTile && game.selectedTile.setSelected(false)
-    tile.setSelected(true)
+    let selectedTile = null
+    if (tile !== game.selectedTile) {
+      tile.setSelected(true)
+      selectedTile = tile
+    }
     return {
       ...game,
-      selectedTile: tile
+      selectedTile
     }
   })
   result.endPlayerTurn = () => update(game => {

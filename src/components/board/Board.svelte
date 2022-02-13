@@ -1,5 +1,5 @@
 <script>
-  import Tile from 'components/board/Tile.svelte'
+  import BoardTile from 'components/board/BoardTile.svelte'
 
   import {
     BOARD,
@@ -10,14 +10,14 @@
   let dragStart
 
   function handleMouseDown(event) {
+    clearTimeout(dragTimeout)
     dragTimeout = setTimeout(() => {
+      clearTimeout(dragTimeout)
       dragStart = {
-        x: event.clientX,
-        y: event.clientY,
         scrollTop: ref.parentElement.scrollTop,
         scrollLeft: ref.parentElement.scrollLeft,
       }
-    }, 100)
+    }, 150)
   }
 
   function handleMouseUp() {
@@ -27,8 +27,13 @@
 
   function handleMouseMove(event) {
     if (dragStart) {
-      ref.parentElement.scrollTop = dragStart.scrollTop - event.clientY + dragStart.y
-      ref.parentElement.scrollLeft = dragStart.scrollLeft - event.clientX + dragStart.x
+      if (dragStart.x || dragStart.y) {
+        ref.parentElement.scrollTop = dragStart.scrollTop - event.clientY + dragStart.y
+        ref.parentElement.scrollLeft = dragStart.scrollLeft - event.clientX + dragStart.x
+      } else {
+        dragStart.x = event.clientX
+        dragStart.y = event.clientY
+      }
     }
   }
 
@@ -45,11 +50,7 @@
   {#each $BOARD.tiles as row, y}
     <div class={`board-row ${y % 2 ? 'even' : 'odd'}`}>
       {#each row as tile}
-        {#if $BOARD.type === 'hex'}
-          <Tile tile={tile} />
-        {:else}
-          <Tile tile={tile} />
-        {/if}
+        <BoardTile tile={tile} />
       {/each}
     </div>
   {/each}
@@ -62,7 +63,10 @@
     padding: 30px;
     width: fit-content;
   }
-  .drag > * {
+  .board.drag:hover {
+    cursor: url('/assets/cursor/Move.png'), auto !important;
+  }
+  .board.drag > * {
     pointer-events: none;
   }
   .board-row {
@@ -70,6 +74,6 @@
     align-items: center;
   }
   .board.hex .odd {
-    margin-left: 48px
+    margin-left: 44px
   }
 </style>
